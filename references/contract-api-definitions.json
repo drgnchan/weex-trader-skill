@@ -1,0 +1,3634 @@
+{
+  "generated_at": "2026-03-04",
+  "count": 40,
+  "definitions": [
+    {
+      "key": "account.adjust_leverage",
+      "title": "Change Leverage",
+      "category": "account",
+      "method": "POST",
+      "path": "/capi/v2/account/leverage",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/AdjustLeverage",
+      "weight_ip": 10,
+      "weight_uid": 20,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "marginMode",
+          "type": "Integer",
+          "required": "Yes",
+          "description": "Margin mode 1: Cross Mode 3: Isolated Mode The marginMode must be set to the account's current mode."
+        },
+        {
+          "name": "longLeverage",
+          "type": "String",
+          "required": "Yes",
+          "description": "Long position leverage In Cross Mode, must be identical to shortLeverage."
+        },
+        {
+          "name": "shortLeverage",
+          "type": "String",
+          "required": "Yes",
+          "description": "Short position leverage In Cross Mode, must be identical to longLeverage."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "msg",
+          "type": "string",
+          "description": "Response message"
+        },
+        {
+          "name": "requestTime",
+          "type": "string",
+          "description": "Timestamp Unix millisecond timestamp"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "description": "Response code"
+        }
+      ]
+    },
+    {
+      "key": "account.adjust_margin",
+      "title": "Adjust Position Margin",
+      "category": "account",
+      "method": "POST",
+      "path": "/capi/v2/account/adjustMargin",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/AdjustMargin",
+      "weight_ip": 15,
+      "weight_uid": 30,
+      "request_params": [
+        {
+          "name": "coinId",
+          "type": "Integer",
+          "required": "No",
+          "description": "Collateral ID Basic Crypto Information Default is 2 (USDT)"
+        },
+        {
+          "name": "isolatedPositionId",
+          "type": "Long",
+          "required": "Yes",
+          "description": "Isolated margin position ID Get the isolatedPositionId"
+        },
+        {
+          "name": "collateralAmount",
+          "type": "String",
+          "required": "Yes",
+          "description": "Collateral amount positive means increase, and negative means decrease"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "msg",
+          "type": "String",
+          "description": "Response message"
+        },
+        {
+          "name": "requestTime",
+          "type": "String",
+          "description": "Timestamp Unix millisecond timestamp"
+        },
+        {
+          "name": "code",
+          "type": "String",
+          "description": "Response code"
+        }
+      ]
+    },
+    {
+      "key": "account.get_accounts",
+      "title": "Get Account List",
+      "category": "account",
+      "method": "GET",
+      "path": "/capi/v2/account/getAccounts",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/AllContractAccountsInfo",
+      "weight_ip": 5,
+      "weight_uid": 5,
+      "request_params": [
+        {
+          "name": "account",
+          "type": "Object",
+          "required": "Account information",
+          "description": ""
+        },
+        {
+          "name": "> defaultFeeSetting",
+          "type": "Object",
+          "required": "Default fee configuration",
+          "description": ""
+        },
+        {
+          "name": ">> is_set_fee_rate",
+          "type": "Boolean",
+          "required": "Whether fee rates are set",
+          "description": ""
+        },
+        {
+          "name": ">> taker_fee_rate",
+          "type": "String",
+          "required": "Taker fee rate",
+          "description": ""
+        },
+        {
+          "name": ">> maker_fee_rate",
+          "type": "String",
+          "required": "Maker fee rate",
+          "description": ""
+        },
+        {
+          "name": ">> is_set_fee_discount",
+          "type": "Boolean",
+          "required": "Whether fee discounts are enabled",
+          "description": ""
+        },
+        {
+          "name": ">> fee_discount",
+          "type": "String",
+          "required": "Account transaction fee discounts",
+          "description": ""
+        },
+        {
+          "name": ">> is_set_taker_maker_fee_discount",
+          "type": "Boolean",
+          "required": "Whether to apply separate fee discounts for takers and makers",
+          "description": ""
+        },
+        {
+          "name": ">> taker_fee_discount",
+          "type": "String",
+          "required": "Taker fee rate discount",
+          "description": ""
+        },
+        {
+          "name": ">> maker_fee_discount",
+          "type": "String",
+          "required": "Maker fee rate discount",
+          "description": ""
+        },
+        {
+          "name": "> feeSetting",
+          "type": "Array Object",
+          "required": "Fee settings",
+          "description": ""
+        },
+        {
+          "name": ">> symbol",
+          "type": "String",
+          "required": "Symbol name",
+          "description": ""
+        },
+        {
+          "name": ">> is_set_fee_rate",
+          "type": "Boolean",
+          "required": "Whether fee rates are set",
+          "description": ""
+        },
+        {
+          "name": ">> taker_fee_rate",
+          "type": "String",
+          "required": "Taker fee rate",
+          "description": ""
+        },
+        {
+          "name": ">> maker_fee_rate",
+          "type": "String",
+          "required": "Maker fee rate",
+          "description": ""
+        },
+        {
+          "name": ">> is_set_fee_discount",
+          "type": "Boolean",
+          "required": "Whether fee discounts are enabled",
+          "description": ""
+        },
+        {
+          "name": ">> fee_discount",
+          "type": "String",
+          "required": "Fee rate discount",
+          "description": ""
+        },
+        {
+          "name": ">> is_set_taker_maker_fee_discount",
+          "type": "Boolean",
+          "required": "Whether to apply separate fee discounts for takers and makers",
+          "description": ""
+        },
+        {
+          "name": ">> taker_fee_discount",
+          "type": "String",
+          "required": "Taker fee rate discount",
+          "description": ""
+        },
+        {
+          "name": ">> maker_fee_discount",
+          "type": "String",
+          "required": "Maker fee rate discount",
+          "description": ""
+        },
+        {
+          "name": "> modeSetting",
+          "type": "Array Object",
+          "required": "Mode settings",
+          "description": ""
+        },
+        {
+          "name": ">> symbol",
+          "type": "String",
+          "required": "Symbol name",
+          "description": ""
+        },
+        {
+          "name": ">> marginMode",
+          "type": "String",
+          "required": "Margin mode",
+          "description": ""
+        },
+        {
+          "name": ">> separatedMode",
+          "type": "String",
+          "required": "Position segregation mode",
+          "description": ""
+        },
+        {
+          "name": ">> positionMode",
+          "type": "String",
+          "required": "Position mode",
+          "description": ""
+        },
+        {
+          "name": "> leverageSetting",
+          "type": "Array Object",
+          "required": "Leverage settings",
+          "description": ""
+        },
+        {
+          "name": ">> symbol",
+          "type": "String",
+          "required": "Symbol name",
+          "description": ""
+        },
+        {
+          "name": ">> isolated_long_leverage",
+          "type": "String",
+          "required": "Isolated long position leverage",
+          "description": ""
+        },
+        {
+          "name": ">> isolated_short_leverage",
+          "type": "String",
+          "required": "Isolated short position leverage",
+          "description": ""
+        },
+        {
+          "name": ">> cross_leverage",
+          "type": "String",
+          "required": "Cross margin leverage",
+          "description": ""
+        },
+        {
+          "name": "> createOrderRateLimitPerMinute",
+          "type": "Integer",
+          "required": "Order creation rate limit per minute",
+          "description": ""
+        },
+        {
+          "name": "> createOrderDelayMilliseconds",
+          "type": "Integer",
+          "required": "Order creation delay (milliseconds)",
+          "description": ""
+        },
+        {
+          "name": "> createdTime",
+          "type": "String",
+          "required": "Creation time Unix millisecond timestamp",
+          "description": ""
+        },
+        {
+          "name": "> updatedTime",
+          "type": "String",
+          "required": "Update time Unix millisecond timestamp",
+          "description": ""
+        },
+        {
+          "name": "collateral",
+          "type": "Array Object",
+          "required": "Collateral information",
+          "description": ""
+        },
+        {
+          "name": "> coin",
+          "type": "String",
+          "required": "Currency",
+          "description": ""
+        },
+        {
+          "name": "> marginMode",
+          "type": "String",
+          "required": "Margin mode",
+          "description": ""
+        },
+        {
+          "name": "> crossSymbol",
+          "type": "String",
+          "required": "When marginMode=CROSS, represents the symbol associated with cross margin mode. Null in other cases.",
+          "description": ""
+        },
+        {
+          "name": "> isolated_position_id",
+          "type": "String",
+          "required": "When marginMode=ISOLATED, represents the position ID associated with isolated margin. 0 in other cases.",
+          "description": ""
+        },
+        {
+          "name": "> amount",
+          "type": "String",
+          "required": "Collateral amount",
+          "description": ""
+        },
+        {
+          "name": "> pending_deposit_amount",
+          "type": "String",
+          "required": "Pending deposit amount",
+          "description": ""
+        },
+        {
+          "name": "> pending_withdraw_amount",
+          "type": "String",
+          "required": "Pending withdrawal amount",
+          "description": ""
+        },
+        {
+          "name": "> pending_transfer_in_amount",
+          "type": "String",
+          "required": "Pending inbound transfer amount",
+          "description": ""
+        },
+        {
+          "name": "> pending_transfer_out_amount",
+          "type": "String",
+          "required": "Pending outbound transfer amount",
+          "description": ""
+        },
+        {
+          "name": "> is_liquidating",
+          "type": "Boolean",
+          "required": "Whether liquidation is triggered (in progress)",
+          "description": ""
+        },
+        {
+          "name": "> legacy_amount",
+          "type": "String",
+          "required": "Legacy balance (display only)",
+          "description": ""
+        },
+        {
+          "name": "> cum_deposit_amount",
+          "type": "String",
+          "required": "Accumulated deposit amount",
+          "description": ""
+        },
+        {
+          "name": "> cum_withdraw_amount",
+          "type": "String",
+          "required": "Accumulated withdrawal amount",
+          "description": ""
+        },
+        {
+          "name": "> cum_transfer_in_amount",
+          "type": "String",
+          "required": "Accumulated inbound transfer amount",
+          "description": ""
+        },
+        {
+          "name": "> cum_transfer_out_amount",
+          "type": "String",
+          "required": "Accumulated outbound transfer amount",
+          "description": ""
+        },
+        {
+          "name": "> cum_margin_move_in_amount",
+          "type": "String",
+          "required": "Accumulated margin deposit amount",
+          "description": ""
+        },
+        {
+          "name": "> cum_margin_move_out_amount",
+          "type": "String",
+          "required": "Accumulated margin withdrawal amount",
+          "description": ""
+        },
+        {
+          "name": "> cum_position_open_long_amount",
+          "type": "String",
+          "required": "Accumulated collateral amount for long position openings",
+          "description": ""
+        },
+        {
+          "name": "> cum_position_open_short_amount",
+          "type": "String",
+          "required": "Accumulated collateral amount for short position openings",
+          "description": ""
+        },
+        {
+          "name": "> cum_position_close_long_amount",
+          "type": "String",
+          "required": "Accumulated collateral amount for long position closings",
+          "description": ""
+        },
+        {
+          "name": "> cum_position_close_short_amount",
+          "type": "String",
+          "required": "Accumulated collateral amount for short position closings",
+          "description": ""
+        },
+        {
+          "name": "> cum_position_fill_fee_amount",
+          "type": "String",
+          "required": "Accumulated trading fees for filled orders",
+          "description": ""
+        },
+        {
+          "name": "> cum_position_liquidate_fee_amount",
+          "type": "String",
+          "required": "Accumulated liquidation fees",
+          "description": ""
+        },
+        {
+          "name": "> cum_position_funding_amount",
+          "type": "String",
+          "required": "Accumulated funding fees",
+          "description": ""
+        },
+        {
+          "name": "> cum_order_fill_fee_income_amount",
+          "type": "String",
+          "required": "Accumulated order fee income",
+          "description": ""
+        },
+        {
+          "name": "> cum_order_liquidate_fee_income_amount",
+          "type": "String",
+          "required": "Accumulated liquidation fee income",
+          "description": ""
+        },
+        {
+          "name": "> created_time",
+          "type": "String",
+          "required": "Creation time,Unix millisecond timestamp",
+          "description": ""
+        },
+        {
+          "name": "> updated_time",
+          "type": "String",
+          "required": "Update time,Unix millisecond timestamp",
+          "description": ""
+        },
+        {
+          "name": "version",
+          "type": "String",
+          "required": "Version number",
+          "description": ""
+        }
+      ],
+      "response_params": []
+    },
+    {
+      "key": "account.auto_add_margin",
+      "title": "Automatic Margin Top-Up",
+      "category": "account",
+      "method": "POST",
+      "path": "/capi/v2/account/modifyAutoAppendMargin",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/AutoAddMargin",
+      "weight_ip": 15,
+      "weight_uid": 30,
+      "request_params": [
+        {
+          "name": "positionId",
+          "type": "Long",
+          "required": "Yes",
+          "description": "Isolated margin position ID"
+        },
+        {
+          "name": "autoAppendMargin",
+          "type": "Boolean",
+          "required": "Yes",
+          "description": "Whether to enable automatic margin call"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "msg",
+          "type": "String",
+          "description": "Response message"
+        },
+        {
+          "name": "requestTime",
+          "type": "String",
+          "description": "Timestamp Unix millisecond timestamp"
+        },
+        {
+          "name": "code",
+          "type": "String",
+          "description": "Response code"
+        }
+      ]
+    },
+    {
+      "key": "account.get_assets",
+      "title": "Get Account Assets",
+      "category": "account",
+      "method": "GET",
+      "path": "/capi/v2/account/assets",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/GetAccountBalance",
+      "weight_ip": 5,
+      "weight_uid": 10,
+      "request_params": [
+        {
+          "name": "coinName",
+          "type": "String",
+          "required": "Name of the crypto",
+          "description": ""
+        },
+        {
+          "name": "available",
+          "type": "String",
+          "required": "Available asset",
+          "description": ""
+        },
+        {
+          "name": "frozen",
+          "type": "String",
+          "required": "Frozen asset",
+          "description": ""
+        },
+        {
+          "name": "equity",
+          "type": "String",
+          "required": "Total asset",
+          "description": ""
+        },
+        {
+          "name": "unrealizePnl",
+          "type": "String",
+          "required": "Unrealized Profit and Loss",
+          "description": ""
+        }
+      ],
+      "response_params": []
+    },
+    {
+      "key": "account.get_all_positions",
+      "title": "Get All Positions",
+      "category": "account",
+      "method": "GET",
+      "path": "/capi/v2/account/position/allPosition",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/GetAllContractPositions",
+      "weight_ip": 10,
+      "weight_uid": 15,
+      "request_params": [
+        {
+          "name": "id",
+          "type": "Long",
+          "required": "Position ID",
+          "description": ""
+        },
+        {
+          "name": "account_id",
+          "type": "Long",
+          "required": "Associated account ID",
+          "description": ""
+        },
+        {
+          "name": "coin_id",
+          "type": "Integer",
+          "required": "Associated collateral currency ID",
+          "description": ""
+        },
+        {
+          "name": "contract_id",
+          "type": "Long",
+          "required": "Associated futures ID",
+          "description": ""
+        },
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Trading pair",
+          "description": ""
+        },
+        {
+          "name": "side",
+          "type": "String",
+          "required": "Position direction such as LONG or SHORT",
+          "description": ""
+        },
+        {
+          "name": "margin_mode",
+          "type": "String",
+          "required": "Margin mode of current position SHARED: Cross Mode ISOLATED: Isolated Mode",
+          "description": ""
+        },
+        {
+          "name": "separated_mode",
+          "type": "String",
+          "required": "Current position's separated mode COMBINED: Combined mode SEPARATED: Separated mode",
+          "description": ""
+        },
+        {
+          "name": "separated_open_order_id",
+          "type": "Long",
+          "required": "Opening order ID of separated position",
+          "description": ""
+        },
+        {
+          "name": "leverage",
+          "type": "String",
+          "required": "Position leverage",
+          "description": ""
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "required": "Current position size",
+          "description": ""
+        },
+        {
+          "name": "open_value",
+          "type": "String",
+          "required": "Initial value at position opening",
+          "description": ""
+        },
+        {
+          "name": "open_fee",
+          "type": "String",
+          "required": "Opening fee",
+          "description": ""
+        },
+        {
+          "name": "funding_fee",
+          "type": "String",
+          "required": "Funding fee",
+          "description": ""
+        },
+        {
+          "name": "marginSize",
+          "type": "String",
+          "required": "Margin amount (margin coin)",
+          "description": ""
+        },
+        {
+          "name": "isolated_margin",
+          "type": "String",
+          "required": "Isolated margin",
+          "description": ""
+        },
+        {
+          "name": "is_auto_append_isolated_margin",
+          "type": "boolean",
+          "required": "Whether the auto-adding of funds for the isolated margin is enabled (only for isolated mode)",
+          "description": ""
+        },
+        {
+          "name": "cum_open_size",
+          "type": "String",
+          "required": "Accumulated opened positions",
+          "description": ""
+        },
+        {
+          "name": "cum_open_value",
+          "type": "String",
+          "required": "Accumulated value of opened positions",
+          "description": ""
+        },
+        {
+          "name": "cum_open_fee",
+          "type": "String",
+          "required": "Accumulated fees paid for opened positions",
+          "description": ""
+        },
+        {
+          "name": "cum_close_size",
+          "type": "String",
+          "required": "Accumulated closed positions",
+          "description": ""
+        },
+        {
+          "name": "cum_close_value",
+          "type": "String",
+          "required": "Accumulated value of closed positions",
+          "description": ""
+        },
+        {
+          "name": "cum_close_fee",
+          "type": "String",
+          "required": "Accumulated fees paid for closing positions",
+          "description": ""
+        },
+        {
+          "name": "cum_funding_fee",
+          "type": "String",
+          "required": "Accumulated settled funding fees",
+          "description": ""
+        },
+        {
+          "name": "cum_liquidate_fee",
+          "type": "String",
+          "required": "Accumulated liquidation fees",
+          "description": ""
+        },
+        {
+          "name": "created_match_sequence_id",
+          "type": "Long",
+          "required": "Matching engine sequence ID at creation",
+          "description": ""
+        },
+        {
+          "name": "updated_match_sequence_id",
+          "type": "Long",
+          "required": "Matching engine sequence ID at last update",
+          "description": ""
+        },
+        {
+          "name": "created_time",
+          "type": "Long",
+          "required": "Creation time Unix millisecond timestamp",
+          "description": ""
+        },
+        {
+          "name": "updated_time",
+          "type": "Long",
+          "required": "Update time Unix millisecond timestamp",
+          "description": ""
+        },
+        {
+          "name": "contractVal",
+          "type": "String",
+          "required": "Futures face value",
+          "description": ""
+        },
+        {
+          "name": "unrealizePnl",
+          "type": "String",
+          "required": "Unrealized PnL",
+          "description": ""
+        },
+        {
+          "name": "liquidatePrice",
+          "type": "String",
+          "required": "Estimated liquidation price If the value = 0, it means the position is at low risk and there is no liquidation price at this time",
+          "description": ""
+        }
+      ],
+      "response_params": []
+    },
+    {
+      "key": "account.get_bills",
+      "title": "Get Contract Account Bills",
+      "category": "account",
+      "method": "POST",
+      "path": "/capi/v2/account/bills",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/GetContractBills",
+      "weight_ip": 2,
+      "weight_uid": 5,
+      "request_params": [
+        {
+          "name": "coin",
+          "type": "String",
+          "required": "No",
+          "description": "Currency name"
+        },
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair"
+        },
+        {
+          "name": "businessType",
+          "type": "String",
+          "required": "No",
+          "description": "Business type deposit : Deposit withdraw : Withdrawal transfer_in : Transfer between different accounts (in) transfer_out : Transfer between different accounts (out) margin_move_in : Collateral transferred within the same account due to opening/closing positions, manual/auto addition margin_move_out : Collateral transferred out within the same account due to opening/closing positions, manual/auto addition position_open_long : Collateral change from opening long positions (buying decreases collateral) position_open_short : Collateral change from opening short positions (selling increases collateral) position_close_long : Collateral change from closing long positions (selling increases collateral) position_close_short : Collateral change from closing short positions (buying decreases collateral) position_funding : Collateral change from position funding fee settlement order_fill_fee_income : Order fill fee income (specific to fee account) order_liquidate_fee_income : Order liquidation fee income (specific to fee account) start_liquidate : Start liquidation finish_liquidate : Finish liquidation order_fix_margin_amount : Compensation for liquidation loss tracking_follow_pay : Copy trading payment, pre-deducted from followers after position closing if profitable tracking_system_pre_receive : Pre-received commission, commission system account receives pre-deducted amount from followers tracking_follow_back : Copy trading commission refund tracking_trader_income : Lead trader income tracking_third_party_share : Profit sharing (shared by lead trader with others)"
+        },
+        {
+          "name": "startTime",
+          "type": "Long",
+          "required": "No",
+          "description": "Start timestamp Unit: milliseconds"
+        },
+        {
+          "name": "endTime",
+          "type": "Long",
+          "required": "No",
+          "description": "End timestamp Unit: milliseconds"
+        },
+        {
+          "name": "limit",
+          "type": "Integer",
+          "required": "No",
+          "description": "Return record limit, default: 20 Minimum: 1 Maximum: 100"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "billId",
+          "type": "String",
+          "description": "Bill ID"
+        },
+        {
+          "name": "coin",
+          "type": "String",
+          "description": "Currency name"
+        },
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "amount",
+          "type": "String",
+          "description": "Amount"
+        },
+        {
+          "name": "businessType",
+          "type": "String",
+          "description": "Transaction business type"
+        },
+        {
+          "name": "balance",
+          "type": "String",
+          "description": "Balance"
+        },
+        {
+          "name": "fillFee",
+          "type": "String",
+          "description": "Transaction fee"
+        },
+        {
+          "name": "transferReason",
+          "type": "String",
+          "description": "Transfer Reason UNKNOWN_TRANSFER_REASON: Unknown transfer reason USER_TRANSFER: User manual transfer INCREASE_CONTRACT_CASH_GIFT: Increase contract cash gift REDUCE_CONTRACT_CASH_GIFT: Reduce contract cash gift REFUND_WXB_DISCOUNT_FEE: Refund WXB discount fee"
+        },
+        {
+          "name": "cTime",
+          "type": "String",
+          "description": "Creation time Unix millisecond timestamp"
+        }
+      ]
+    },
+    {
+      "key": "account.get_single_position",
+      "title": "Get Single Position",
+      "category": "account",
+      "method": "GET",
+      "path": "/capi/v2/account/position/singlePosition",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/GetSingleContractPosition",
+      "weight_ip": 2,
+      "weight_uid": 3,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "id",
+          "type": "Long",
+          "description": "Position ID"
+        },
+        {
+          "name": "account_id",
+          "type": "Long",
+          "description": "Associated account ID"
+        },
+        {
+          "name": "coin_id",
+          "type": "Integer",
+          "description": "Associated collateral currency ID"
+        },
+        {
+          "name": "contract_id",
+          "type": "Long",
+          "description": "Associated futures ID"
+        },
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "side",
+          "type": "String",
+          "description": "Position direction such as LONG or SHORT"
+        },
+        {
+          "name": "margin_mode",
+          "type": "String",
+          "description": "Margin mode of current position SHARED: Cross Mode ISOLATED: Isolated Mode"
+        },
+        {
+          "name": "separated_mode",
+          "type": "String",
+          "description": "Current position's separated mode COMBINED: Combined mode SEPARATED: Separated mode"
+        },
+        {
+          "name": "separated_open_order_id",
+          "type": "Long",
+          "description": "Opening order ID of separated position"
+        },
+        {
+          "name": "leverage",
+          "type": "String",
+          "description": "Position leverage"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "description": "Current position size"
+        },
+        {
+          "name": "open_value",
+          "type": "String",
+          "description": "Initial value at position opening"
+        },
+        {
+          "name": "open_fee",
+          "type": "String",
+          "description": "Opening fee"
+        },
+        {
+          "name": "funding_fee",
+          "type": "String",
+          "description": "Funding fee"
+        },
+        {
+          "name": "marginSize",
+          "type": "String",
+          "description": "Margin amount (margin coin)"
+        },
+        {
+          "name": "isolated_margin",
+          "type": "String",
+          "description": "Isolated margin"
+        },
+        {
+          "name": "is_auto_append_isolated_margin",
+          "type": "boolean",
+          "description": "Whether the auto-adding of funds for the isolated margin is enabled (only for isolated mode)"
+        },
+        {
+          "name": "cum_open_size",
+          "type": "String",
+          "description": "Accumulated opened positions"
+        },
+        {
+          "name": "cum_open_value",
+          "type": "String",
+          "description": "Accumulated value of opened positions"
+        },
+        {
+          "name": "cum_open_fee",
+          "type": "String",
+          "description": "Accumulated fees paid for opened positions"
+        },
+        {
+          "name": "cum_close_size",
+          "type": "String",
+          "description": "Accumulated closed positions"
+        },
+        {
+          "name": "cum_close_value",
+          "type": "String",
+          "description": "Accumulated value of closed positions"
+        },
+        {
+          "name": "cum_close_fee",
+          "type": "String",
+          "description": "Accumulated fees paid for closing positions"
+        },
+        {
+          "name": "cum_funding_fee",
+          "type": "String",
+          "description": "Accumulated settled funding fees"
+        },
+        {
+          "name": "cum_liquidate_fee",
+          "type": "String",
+          "description": "Accumulated liquidation fees"
+        },
+        {
+          "name": "created_match_sequence_id",
+          "type": "Long",
+          "description": "Matching engine sequence ID at creation"
+        },
+        {
+          "name": "updated_match_sequence_id",
+          "type": "Long",
+          "description": "Matching engine sequence ID at last update"
+        },
+        {
+          "name": "created_time",
+          "type": "Long",
+          "description": "Creation time Unix millisecond timestamp"
+        },
+        {
+          "name": "updated_time",
+          "type": "Long",
+          "description": "Update time Unix millisecond timestamp"
+        },
+        {
+          "name": "contractVal",
+          "type": "String",
+          "description": "Futures face value"
+        },
+        {
+          "name": "unrealizePnl",
+          "type": "String",
+          "description": "Unrealized PnL"
+        },
+        {
+          "name": "liquidatePrice",
+          "type": "String",
+          "description": "Estimated liquidation price If the value = 0, it means the position is at low risk and there is no liquidation price at this time"
+        }
+      ]
+    },
+    {
+      "key": "account.get_settings",
+      "title": "Get User Settings Of One Single Futures",
+      "category": "account",
+      "method": "GET",
+      "path": "/capi/v2/account/settings",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/GetSingleContractUserConfig",
+      "weight_ip": 1,
+      "weight_uid": 1,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair If not filled in, all will be returned by default."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "object",
+          "description": "Trading pair"
+        },
+        {
+          "name": "> isolated_long_leverage",
+          "type": "string",
+          "description": "Isolated long position leverage"
+        },
+        {
+          "name": "> isolated_short_leverage",
+          "type": "string",
+          "description": "Isolated short position leverage"
+        },
+        {
+          "name": "> cross_leverage",
+          "type": "string",
+          "description": "Cross margin leverage"
+        }
+      ]
+    },
+    {
+      "key": "account.get_account",
+      "title": "Get Single Account",
+      "category": "account",
+      "method": "GET",
+      "path": "/capi/v2/account/getAccount",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/GetUserSingleAssetInfo",
+      "weight_ip": 1,
+      "weight_uid": 1,
+      "request_params": [
+        {
+          "name": "coin",
+          "type": "String",
+          "required": "Yes",
+          "description": "coin name"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "account",
+          "type": "Object",
+          "description": "Account information"
+        },
+        {
+          "name": "> defaultFeeSetting",
+          "type": "Object",
+          "description": "Default fee configuration"
+        },
+        {
+          "name": ">> is_set_fee_rate",
+          "type": "Boolean",
+          "description": "Whether fee rates are set"
+        },
+        {
+          "name": ">> taker_fee_rate",
+          "type": "String",
+          "description": "Taker fee rate"
+        },
+        {
+          "name": ">> maker_fee_rate",
+          "type": "String",
+          "description": "Maker fee rate"
+        },
+        {
+          "name": ">> is_set_fee_discount",
+          "type": "Boolean",
+          "description": "Whether fee discounts are enabled"
+        },
+        {
+          "name": ">> fee_discount",
+          "type": "String",
+          "description": "Fee rate discount"
+        },
+        {
+          "name": ">> is_set_taker_maker_fee_discount",
+          "type": "Boolean",
+          "description": "Whether to apply separate fee discounts for takers and makers"
+        },
+        {
+          "name": ">> taker_fee_discount",
+          "type": "String",
+          "description": "Taker fee rate discount"
+        },
+        {
+          "name": ">> maker_fee_discount",
+          "type": "String",
+          "description": "Maker fee rate discount"
+        },
+        {
+          "name": "> feeSetting",
+          "type": "Array Object",
+          "description": "Fee settings"
+        },
+        {
+          "name": ">> symbol",
+          "type": "String",
+          "description": "Symbol name"
+        },
+        {
+          "name": ">> is_set_fee_rate",
+          "type": "Boolean",
+          "description": "Whether fee rates are set"
+        },
+        {
+          "name": ">> taker_fee_rate",
+          "type": "String",
+          "description": "Taker fee rate"
+        },
+        {
+          "name": ">> maker_fee_rate",
+          "type": "String",
+          "description": "Maker fee rate"
+        },
+        {
+          "name": ">> is_set_fee_discount",
+          "type": "Boolean",
+          "description": "Whether fee discounts are enabled"
+        },
+        {
+          "name": ">> fee_discount",
+          "type": "String",
+          "description": "Fee rate discount"
+        },
+        {
+          "name": ">> is_set_taker_maker_fee_discount",
+          "type": "Boolean",
+          "description": "Whether to apply separate fee discounts for takers and makers"
+        },
+        {
+          "name": ">> taker_fee_discount",
+          "type": "String",
+          "description": "Taker fee rate discount"
+        },
+        {
+          "name": ">> maker_fee_discount",
+          "type": "String",
+          "description": "Maker fee rate discount"
+        },
+        {
+          "name": "> modeSetting",
+          "type": "Array Object",
+          "description": "Mode settings"
+        },
+        {
+          "name": ">> symbol",
+          "type": "String",
+          "description": "Symbol name"
+        },
+        {
+          "name": ">> marginMode",
+          "type": "String",
+          "description": "Margin mode"
+        },
+        {
+          "name": ">> separated_mode",
+          "type": "String",
+          "description": "Position segregation mode"
+        },
+        {
+          "name": ">> position_mode",
+          "type": "String",
+          "description": "Position mode"
+        },
+        {
+          "name": "> leverageSetting",
+          "type": "Array Object",
+          "description": "Leverage settings"
+        },
+        {
+          "name": ">> symbol",
+          "type": "String",
+          "description": "Symbol name"
+        },
+        {
+          "name": ">> isolated_long_leverage",
+          "type": "String",
+          "description": "Isolated long position leverage"
+        },
+        {
+          "name": ">> isolated_short_leverage",
+          "type": "String",
+          "description": "Isolated short position leverage"
+        },
+        {
+          "name": ">> cross_leverage",
+          "type": "String",
+          "description": "Cross margin leverage"
+        },
+        {
+          "name": "> createOrderRateLimitPerMinute",
+          "type": "Integer",
+          "description": "Order creation rate limit per minute"
+        },
+        {
+          "name": "> createOrderDelayMilliseconds",
+          "type": "Integer",
+          "description": "Order creation delay (milliseconds)"
+        },
+        {
+          "name": "> createdTime",
+          "type": "String",
+          "description": "Creation time Unix millisecond timestamp"
+        },
+        {
+          "name": "> updatedTime",
+          "type": "String",
+          "description": "Update time Unix millisecond timestamp"
+        },
+        {
+          "name": "collateral",
+          "type": "Array Object",
+          "description": "Collateral information"
+        },
+        {
+          "name": "> coin",
+          "type": "String",
+          "description": "Currency"
+        },
+        {
+          "name": "> marginMode",
+          "type": "String",
+          "description": "Margin mode"
+        },
+        {
+          "name": "> crossSymbol",
+          "type": "String",
+          "description": "When marginMode=CROSS, represents the symbol associated with cross margin mode. Null in other cases."
+        },
+        {
+          "name": "> isolatedPositionId",
+          "type": "String",
+          "description": "When marginMode=ISOLATED, represents the position ID associated with isolated margin. 0 in other cases."
+        },
+        {
+          "name": "> amount",
+          "type": "String",
+          "description": "Collateral amount"
+        },
+        {
+          "name": "> pending_deposit_amount",
+          "type": "String",
+          "description": "Pending deposit amount"
+        },
+        {
+          "name": "> pending_withdraw_amount",
+          "type": "String",
+          "description": "Pending withdrawal amount"
+        },
+        {
+          "name": "> pending_transfer_in_amount",
+          "type": "String",
+          "description": "Pending inbound transfer amount"
+        },
+        {
+          "name": "> pending_transfer_out_amount",
+          "type": "String",
+          "description": "Pending outbound transfer amount"
+        },
+        {
+          "name": "> is_liquidating",
+          "type": "Boolean",
+          "description": "Whether liquidation is triggered (in progress)"
+        },
+        {
+          "name": "> legacy_amount",
+          "type": "String",
+          "description": "Legacy balance (display only)"
+        },
+        {
+          "name": "> cum_deposit_amount",
+          "type": "String",
+          "description": "Accumulated deposit amount"
+        },
+        {
+          "name": "> cum_withdraw_amount",
+          "type": "String",
+          "description": "Accumulated withdrawal amount"
+        },
+        {
+          "name": "> cum_transfer_in_amount",
+          "type": "String",
+          "description": "Accumulated inbound transfer amount"
+        },
+        {
+          "name": "> cum_transfer_out_amount",
+          "type": "String",
+          "description": "Accumulated outbound transfer amount"
+        },
+        {
+          "name": "> cum_margin_move_in_amount",
+          "type": "String",
+          "description": "Accumulated margin deposit amount"
+        },
+        {
+          "name": "> cum_margin_move_out_amount",
+          "type": "String",
+          "description": "Accumulated margin withdrawal amount"
+        },
+        {
+          "name": "> cum_position_open_long_amount",
+          "type": "String",
+          "description": "Accumulated collateral amount for long position openings"
+        },
+        {
+          "name": "> cum_position_open_short_amount",
+          "type": "String",
+          "description": "Accumulated collateral amount for short position openings"
+        },
+        {
+          "name": "> cum_position_close_long_amount",
+          "type": "String",
+          "description": "Accumulated collateral amount for long position closings"
+        },
+        {
+          "name": "> cum_position_close_short_amount",
+          "type": "String",
+          "description": "Accumulated collateral amount for short position closings"
+        },
+        {
+          "name": "> cum_position_fill_fee_amount",
+          "type": "String",
+          "description": "Accumulated trading fees for filled orders"
+        },
+        {
+          "name": "> cum_position_liquidate_fee_amount",
+          "type": "String",
+          "description": "Accumulated liquidation fees"
+        },
+        {
+          "name": "> cum_position_funding_amount",
+          "type": "String",
+          "description": "Accumulated funding fees"
+        },
+        {
+          "name": "> cum_order_fill_fee_income_amount",
+          "type": "String",
+          "description": "Accumulated order fee income"
+        },
+        {
+          "name": "> cum_order_liquidate_fee_income_amount",
+          "type": "String",
+          "description": "Accumulated liquidation fee income"
+        },
+        {
+          "name": "> created_time",
+          "type": "String",
+          "description": "Creation time Unix millisecond timestamp"
+        },
+        {
+          "name": "> updated_time",
+          "type": "String",
+          "description": "Update time Unix millisecond timestamp"
+        },
+        {
+          "name": "version",
+          "type": "String",
+          "description": "Version number"
+        }
+      ]
+    },
+    {
+      "key": "account.change_hold_mode",
+      "title": "Modify User Account Mode",
+      "category": "account",
+      "method": "POST",
+      "path": "/capi/v2/account/position/changeHoldModel",
+      "doc_url": "https://www.weex.com/api-doc/contract/Account_API/ModifyUserAccountMode",
+      "weight_ip": 20,
+      "weight_uid": 50,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "marginMode",
+          "type": "Integer",
+          "required": "Yes",
+          "description": "Margin mode 1: Cross Mode 3: Isolated Mode"
+        },
+        {
+          "name": "separatedMode",
+          "type": "Integer",
+          "required": "No",
+          "description": "Position segregation mode 1: Combined mode System will automatically set to Combined mode by default"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "msg",
+          "type": "string",
+          "description": "Response message"
+        },
+        {
+          "name": "requestTime",
+          "type": "string",
+          "description": "Timestamp Unix millisecond timestamp"
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "description": "Response code"
+        }
+      ]
+    },
+    {
+      "key": "market.get_all_tickers",
+      "title": "Get All Ticker",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/tickers",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetAllTickerInfo",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Trading pair",
+          "description": ""
+        },
+        {
+          "name": "last",
+          "type": "String",
+          "required": "Latest execution price",
+          "description": ""
+        },
+        {
+          "name": "best_ask",
+          "type": "String",
+          "required": "Ask price",
+          "description": ""
+        },
+        {
+          "name": "best_bid",
+          "type": "String",
+          "required": "Bid price",
+          "description": ""
+        },
+        {
+          "name": "high_24h",
+          "type": "String",
+          "required": "Highest price in the last 24 hours",
+          "description": ""
+        },
+        {
+          "name": "low_24h",
+          "type": "String",
+          "required": "Lowest price in the last 24 hours",
+          "description": ""
+        },
+        {
+          "name": "volume_24h",
+          "type": "String",
+          "required": "Trading volume of quote currency",
+          "description": ""
+        },
+        {
+          "name": "timestamp",
+          "type": "String",
+          "required": "System timestamp Unix millisecond timestamp",
+          "description": ""
+        },
+        {
+          "name": "priceChangePercent",
+          "type": "String",
+          "required": "Price increase or decrease (24 hours)",
+          "description": ""
+        },
+        {
+          "name": "base_volume",
+          "type": "String",
+          "required": "Trading volume of quote currency",
+          "description": ""
+        },
+        {
+          "name": "markPrice",
+          "type": "String",
+          "required": "Mark price",
+          "description": ""
+        },
+        {
+          "name": "indexPrice",
+          "type": "String",
+          "required": "Index price",
+          "description": ""
+        }
+      ],
+      "response_params": []
+    },
+    {
+      "key": "market.get_funding_history",
+      "title": "Get Historical Funding Rates",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/getHistoryFundRate",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetContractFundingHistory",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "limit",
+          "type": "Integer",
+          "required": "No",
+          "description": "The size of the data ranges from 1 to 100, with a default of 10"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "string",
+          "description": "Trading pair"
+        },
+        {
+          "name": "fundingRate",
+          "type": "string",
+          "description": "Funding rate"
+        },
+        {
+          "name": "fundingTime",
+          "type": "long",
+          "description": "Funding fee settlement time Unix millisecond timestamp"
+        }
+      ]
+    },
+    {
+      "key": "market.get_contract_info",
+      "title": "Get Futures Information",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/contracts",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetContractInfo",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "underlying_index",
+          "type": "String",
+          "description": "Futures crypto"
+        },
+        {
+          "name": "quote_currency",
+          "type": "String",
+          "description": "Quote currency"
+        },
+        {
+          "name": "coin",
+          "type": "String",
+          "description": "Margin token"
+        },
+        {
+          "name": "contract_val",
+          "type": "String",
+          "description": "Futures face value"
+        },
+        {
+          "name": "delivery",
+          "type": "Array",
+          "description": "Settlement times"
+        },
+        {
+          "name": "size_increment",
+          "type": "String",
+          "description": "Decimal places of the quantity"
+        },
+        {
+          "name": "tick_size",
+          "type": "String",
+          "description": "Decimal places of the price"
+        },
+        {
+          "name": "forwardContractFlag",
+          "type": "Boolean",
+          "description": "Whether it is USDT-M futures"
+        },
+        {
+          "name": "priceEndStep",
+          "type": "BigDecimal",
+          "description": "Step size of the last decimal digit in the price"
+        },
+        {
+          "name": "minLeverage",
+          "type": "Integer",
+          "description": "Minimum leverage (default: 1)"
+        },
+        {
+          "name": "maxLeverage",
+          "type": "Integer",
+          "description": "Maximum leverage (default: 100)"
+        },
+        {
+          "name": "buyLimitPriceRatio",
+          "type": "String",
+          "description": "Ratio of bid price to limit price"
+        },
+        {
+          "name": "sellLimitPriceRatio",
+          "type": "String",
+          "description": "Ratio of ask price to limit price"
+        },
+        {
+          "name": "makerFeeRate",
+          "type": "String",
+          "description": "Maker rate"
+        },
+        {
+          "name": "takerFeeRate",
+          "type": "String",
+          "description": "Taker rate"
+        },
+        {
+          "name": "minOrderSize",
+          "type": "String",
+          "description": "Minimum order size (base currency)"
+        },
+        {
+          "name": "maxOrderSize",
+          "type": "String",
+          "description": "Maximum order size (base currency)"
+        },
+        {
+          "name": "maxPositionSize",
+          "type": "String",
+          "description": "Maximum position size (base currency)"
+        },
+        {
+          "name": "marketOpenLimitSize",
+          "type": "String",
+          "description": "Market Order Opening Position Single Limit (base currency)"
+        }
+      ]
+    },
+    {
+      "key": "market.get_currency_index",
+      "title": "Get Cryptocurrency Index",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/index",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetCurrencyIndex",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "priceType",
+          "type": "String",
+          "required": "No",
+          "description": "Price Type :  MARK mark; INDEX index; INDEX by default"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "index",
+          "type": "String",
+          "description": "Index"
+        },
+        {
+          "name": "timestamp",
+          "type": "String",
+          "description": "Timestamp Unix millisecond timestamp"
+        }
+      ]
+    },
+    {
+      "key": "market.get_current_fund_rate",
+      "title": "Get Current Funding Rate",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/currentFundRate",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetCurrentFundRate",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "fundingRate",
+          "type": "String",
+          "description": "Current funding rates"
+        },
+        {
+          "name": "collectCycle",
+          "type": "Long",
+          "description": "Funding rate settlement cycle Unit: minute"
+        },
+        {
+          "name": "timestamp",
+          "type": "Long",
+          "description": "Funding fee settlement time Unix millisecond timestamp"
+        }
+      ]
+    },
+    {
+      "key": "market.get_depth",
+      "title": "Get OrderBook Depth",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/depth",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetDepthData",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "limit",
+          "type": "Integer",
+          "required": "No",
+          "description": "Fixed gear enumeration value: 15/200, the default gear is 15"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "asks",
+          "type": "List",
+          "description": "Sell side depth data Format: [price, quantity] where quantity is in base currency"
+        },
+        {
+          "name": "Index 0",
+          "type": "String",
+          "description": "Price"
+        },
+        {
+          "name": "Index 1",
+          "type": "String",
+          "description": "Quantity"
+        },
+        {
+          "name": "bids",
+          "type": "List",
+          "description": "Buy side depth data Format: [price, quantity] where quantity is in base currency"
+        },
+        {
+          "name": "Index 0",
+          "type": "String",
+          "description": "Price"
+        },
+        {
+          "name": "Index 1",
+          "type": "String",
+          "description": "Quantity"
+        },
+        {
+          "name": "timestamp",
+          "type": "String",
+          "description": "Timestamp Unix millisecond timestamp"
+        }
+      ]
+    },
+    {
+      "key": "market.get_history_candles",
+      "title": "Get Historical Candlestick",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/historyCandles",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetHistoryKLineData",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "granularity",
+          "type": "String",
+          "required": "Yes",
+          "description": "Candlestick interval[1m,5m,15m,30m,1h,4h,12h,1d,1w]"
+        },
+        {
+          "name": "startTime",
+          "type": "Long",
+          "required": "No",
+          "description": "The start time is to query the k-lines after this time Unix millisecond timestamp"
+        },
+        {
+          "name": "endTime",
+          "type": "Long",
+          "required": "No",
+          "description": "The end time is to query the k-lines before this time Unix millisecond timestamp"
+        },
+        {
+          "name": "limit",
+          "type": "Integer",
+          "required": "No",
+          "description": "The size of the data ranges from 1 to 100, with a default of 100"
+        },
+        {
+          "name": "priceType",
+          "type": "String",
+          "required": "No",
+          "description": "Price Type : LAST latest market price; MARK mark; INDEX index; LAST by default"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "index[0]",
+          "type": "String",
+          "description": "Candlestick time Unix millisecond timestamp"
+        },
+        {
+          "name": "index[1]",
+          "type": "String",
+          "description": "Opening price"
+        },
+        {
+          "name": "index[2]",
+          "type": "String",
+          "description": "Highest price"
+        },
+        {
+          "name": "index[3]",
+          "type": "String",
+          "description": "Lowest price"
+        },
+        {
+          "name": "index[4]",
+          "type": "String",
+          "description": "Closing price"
+        },
+        {
+          "name": "index[5]",
+          "type": "String",
+          "description": "Trading volume of the base coin"
+        },
+        {
+          "name": "index[6]",
+          "type": "String",
+          "description": "Trading volume of quote currency"
+        }
+      ]
+    },
+    {
+      "key": "market.get_candles",
+      "title": "Get Candlestick Data",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/candles",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetKLineData",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "granularity",
+          "type": "String",
+          "required": "Yes",
+          "description": "Candlestick interval[1m,5m,15m,30m,1h,4h,12h,1d,1w]"
+        },
+        {
+          "name": "limit",
+          "type": "Integer",
+          "required": "No",
+          "description": "The size of the data ranges from 1 to 1000, with a default of 100"
+        },
+        {
+          "name": "priceType",
+          "type": "String",
+          "required": "No",
+          "description": "Price Type : LAST latest market price; MARK mark; INDEX index; LAST by default"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "index[0]",
+          "type": "String",
+          "description": "Candlestick time Unix millisecond timestamp"
+        },
+        {
+          "name": "index[1]",
+          "type": "String",
+          "description": "Opening price"
+        },
+        {
+          "name": "index[2]",
+          "type": "String",
+          "description": "Highest price"
+        },
+        {
+          "name": "index[3]",
+          "type": "String",
+          "description": "Lowest price"
+        },
+        {
+          "name": "index[4]",
+          "type": "String",
+          "description": "Closing price"
+        },
+        {
+          "name": "index[5]",
+          "type": "String",
+          "description": "Trading volume of the base coin"
+        },
+        {
+          "name": "index[6]",
+          "type": "String",
+          "description": "Trading volume of quote currency"
+        }
+      ]
+    },
+    {
+      "key": "market.get_next_funding_time",
+      "title": "Get Next Funding Time",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/funding_time",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetNextContractSettlementTime",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "fundingTime",
+          "type": "Long",
+          "description": "Settlement time Unix millisecond timestamp"
+        }
+      ]
+    },
+    {
+      "key": "market.get_server_time",
+      "title": "Get Server Time",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/time",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetServerTime",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "epoch",
+          "type": "String",
+          "required": "Unix timestamp in UTC time zone, represented as a decimal number of seconds",
+          "description": ""
+        },
+        {
+          "name": "iso",
+          "type": "String",
+          "required": "ISO 8601 standard time format",
+          "description": ""
+        },
+        {
+          "name": "timestamp",
+          "type": "Long",
+          "required": "Server time Unix millisecond timestamp",
+          "description": ""
+        }
+      ],
+      "response_params": []
+    },
+    {
+      "key": "market.get_ticker",
+      "title": "Get Single Ticker",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/ticker",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetTickerInfo",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "last",
+          "type": "String",
+          "description": "Latest execution price"
+        },
+        {
+          "name": "best_ask",
+          "type": "String",
+          "description": "Ask price"
+        },
+        {
+          "name": "best_bid",
+          "type": "String",
+          "description": "Bid price"
+        },
+        {
+          "name": "high_24h",
+          "type": "String",
+          "description": "Highest price in the last 24 hours"
+        },
+        {
+          "name": "low_24h",
+          "type": "String",
+          "description": "Lowest price in the last 24 hours"
+        },
+        {
+          "name": "volume_24h",
+          "type": "String",
+          "description": "Trading volume of quote currency"
+        },
+        {
+          "name": "timestamp",
+          "type": "String",
+          "description": "System timestamp Unix millisecond timestamp"
+        },
+        {
+          "name": "priceChangePercent",
+          "type": "String",
+          "description": "Price increase or decrease (24 hours)"
+        },
+        {
+          "name": "base_volume",
+          "type": "String",
+          "description": "Trading volume of quote currency"
+        },
+        {
+          "name": "markPrice",
+          "type": "String",
+          "description": "Mark price"
+        },
+        {
+          "name": "indexPrice",
+          "type": "String",
+          "description": "Index price"
+        }
+      ]
+    },
+    {
+      "key": "market.get_open_interest",
+      "title": "Get Open Interest",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/open_interest",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetTotalPlatformOpenInterest",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "base_volume",
+          "type": "String",
+          "description": "Total open interest of the platform Specific coins"
+        },
+        {
+          "name": "target_volume",
+          "type": "String",
+          "description": "Quote Currency Holdings"
+        },
+        {
+          "name": "timestamp",
+          "type": "String",
+          "description": "Timestamp Unix millisecond timestamp"
+        }
+      ]
+    },
+    {
+      "key": "market.get_trades",
+      "title": "Get Trades",
+      "category": "market",
+      "method": "GET",
+      "path": "/capi/v2/market/trades",
+      "doc_url": "https://www.weex.com/api-doc/contract/Market_API/GetTradeData",
+      "weight_ip": null,
+      "weight_uid": null,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "limit",
+          "type": "Integer",
+          "required": "No",
+          "description": "The size of the data ranges from 1 to 1000, with a default of 100"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "ticketId",
+          "type": "String",
+          "description": "Filled order ID"
+        },
+        {
+          "name": "time",
+          "type": "Long",
+          "description": "The time at which the order was filled Unix millisecond timestamp"
+        },
+        {
+          "name": "price",
+          "type": "String",
+          "description": "The price at which the order was filled"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "description": "The quantity that was filled (base currency)"
+        },
+        {
+          "name": "value",
+          "type": "String",
+          "description": "Filled amount  (quote currency)"
+        },
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "isBestMatch",
+          "type": "Boolean",
+          "description": "Was the trade the best price match?"
+        },
+        {
+          "name": "isBuyerMaker",
+          "type": "Boolean",
+          "description": "Was the buyer the maker?"
+        },
+        {
+          "name": "contractVal",
+          "type": "String",
+          "description": "Futures face value (unit: contracts)"
+        }
+      ]
+    },
+    {
+      "key": "transaction.cancel_all_orders",
+      "title": "Cancel All Orders",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/cancelAllOrders",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/CancelAllOrders",
+      "weight_ip": 40,
+      "weight_uid": 50,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair. If not provided, orders for all trading pairs will be cancelled"
+        },
+        {
+          "name": "cancelOrderType",
+          "type": "String",
+          "required": "Yes",
+          "description": "Order type to cancel: normal : Cancel normal orders plan : Cancel trigger/plan orders"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "orderId",
+          "type": "Long",
+          "description": "Order ID"
+        },
+        {
+          "name": "success",
+          "type": "Boolean",
+          "description": "Whether the order was cancelled successfully"
+        }
+      ]
+    },
+    {
+      "key": "transaction.cancel_order",
+      "title": "Cancel Order",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/cancel_order",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/CancelOrder",
+      "weight_ip": 2,
+      "weight_uid": 3,
+      "request_params": [
+        {
+          "name": "orderId",
+          "type": "String",
+          "required": "No",
+          "description": "Either Order ID or clientOid is required."
+        },
+        {
+          "name": "clientOid",
+          "type": "String",
+          "required": "No",
+          "description": "Either Client customized ID or orderId is required."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "order_id",
+          "type": "String",
+          "description": "Order ID"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "description": "Client identifier"
+        },
+        {
+          "name": "result",
+          "type": "Boolean",
+          "description": "Cancellation status"
+        },
+        {
+          "name": "err_msg",
+          "type": "String",
+          "description": "Error message if cancellation failed"
+        }
+      ]
+    },
+    {
+      "key": "transaction.cancel_batch_orders",
+      "title": "Batch Cancel Orders",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/cancel_batch_orders",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/CancelOrdersBatch",
+      "weight_ip": 5,
+      "weight_uid": 10,
+      "request_params": [
+        {
+          "name": "ids",
+          "type": "String[]",
+          "required": "No",
+          "description": "Either Order ID or cids is required."
+        },
+        {
+          "name": "cids",
+          "type": "String[]",
+          "required": "No",
+          "description": "Either Client customized ID or ids is required."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "result",
+          "type": "Boolean",
+          "description": "Processing result (success/failure)"
+        },
+        {
+          "name": "orderIds",
+          "type": "List<String>",
+          "description": "List of order IDs to be cancelled"
+        },
+        {
+          "name": "clientOids",
+          "type": "List<String>",
+          "description": "List of client order IDs"
+        },
+        {
+          "name": "cancelOrderResultList",
+          "type": "List<CancelOrderResult>",
+          "description": "List of cancellation results"
+        },
+        {
+          "name": "failInfos",
+          "type": "List<CancelOrderResult>",
+          "description": "List of failed cancellation info"
+        }
+      ]
+    },
+    {
+      "key": "transaction.cancel_plan_order",
+      "title": "Cancel Trigger Order",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/cancel_plan",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/CancelPendingOrder",
+      "weight_ip": 2,
+      "weight_uid": 3,
+      "request_params": [
+        {
+          "name": "orderId",
+          "type": "String",
+          "required": "Yes",
+          "description": "Order ID"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "order_id",
+          "type": "String",
+          "description": "Order ID"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "description": "Client identifier"
+        },
+        {
+          "name": "result",
+          "type": "Boolean",
+          "description": "Whether the cancellation was successful"
+        },
+        {
+          "name": "err_msg",
+          "type": "String",
+          "description": "Error message if the cancellation failed"
+        }
+      ]
+    },
+    {
+      "key": "transaction.close_positions",
+      "title": "Close All Positions",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/closePositions",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/ClosePositions",
+      "weight_ip": 40,
+      "weight_uid": 50,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair. If not provided, all positions will be closed at market price"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "positionId",
+          "type": "Long",
+          "description": "Position ID"
+        },
+        {
+          "name": "success",
+          "type": "Boolean",
+          "description": "Whether the position was successfully closed"
+        },
+        {
+          "name": "successOrderId",
+          "type": "Long",
+          "description": "Order ID if successful (0 if failed)"
+        },
+        {
+          "name": "errorMessage",
+          "type": "String",
+          "description": "Error message if the close position failed"
+        }
+      ]
+    },
+    {
+      "key": "transaction.get_current_orders",
+      "title": "Get Current Orders",
+      "category": "transaction",
+      "method": "GET",
+      "path": "/capi/v2/order/current",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/GetCurrentOrderStatus",
+      "weight_ip": 2,
+      "weight_uid": 2,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair"
+        },
+        {
+          "name": "orderId",
+          "type": "Long",
+          "required": "No",
+          "description": "OrderId"
+        },
+        {
+          "name": "startTime",
+          "type": "Long",
+          "required": "No",
+          "description": "The record start time for the query Unix millisecond timestamp"
+        },
+        {
+          "name": "endTime",
+          "type": "Long",
+          "required": "No",
+          "description": "The end time of the record for the query Unix millisecond timestamp"
+        },
+        {
+          "name": "limit",
+          "type": "Integer",
+          "required": "No",
+          "description": "Limit number default 100 max 100"
+        },
+        {
+          "name": "page",
+          "type": "Integer",
+          "required": "No",
+          "description": "Page number  default 0"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "description": "Order amount"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "description": "Client identifier"
+        },
+        {
+          "name": "createTime",
+          "type": "String",
+          "description": "Creation time Unix millisecond timestamp"
+        },
+        {
+          "name": "filled_qty",
+          "type": "String",
+          "description": "Filled quantity"
+        },
+        {
+          "name": "fee",
+          "type": "String",
+          "description": "Transaction fee"
+        },
+        {
+          "name": "order_id",
+          "type": "String",
+          "description": "Order ID"
+        },
+        {
+          "name": "price",
+          "type": "String",
+          "description": "Order price"
+        },
+        {
+          "name": "price_avg",
+          "type": "String",
+          "description": "Average filled price"
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": "Order status pending: The order has been submitted for matching, but the result has not been processed yet. open: The order has been processed by the matching engine (order placed), and may have been partially filled. filled: The order has been completely filled [final state]. canceling: The order is being canceled. canceled: The order has been canceled. It may have been partially filled. [final state]. untriggered: The conditional order has not been triggered yet."
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "description": "Order type open_long: Open long open_short: Open short close_long: Close long close_short: Close short offset_liquidate_long: Reduce position, close long offset_liquidate_short: Reduce position, close short agreement_close_long: Agreement close long agreement_close_short: Agreement close short burst_liquidate_long: Liquidation close long burst_liquidate_short: Liquidation close short"
+        },
+        {
+          "name": "order_type",
+          "type": "String",
+          "description": "Order type normal: Regular limit order, valid until canceled. postOnly: Maker-only order fok: Fill or kill, must be completely filled or canceled immediately. ioc: Immediate or cancel, fill as much as possible and cancel the remaining."
+        },
+        {
+          "name": "totalProfits",
+          "type": "String",
+          "description": "Total PnL"
+        },
+        {
+          "name": "contracts",
+          "type": "Integer",
+          "description": "Order size in contract units"
+        },
+        {
+          "name": "filledQtyContracts",
+          "type": "Integer",
+          "description": "Filled quantity in contract units"
+        },
+        {
+          "name": "presetTakeProfitPrice",
+          "type": "String",
+          "description": "Preset take-profit price"
+        },
+        {
+          "name": "presetStopLossPrice",
+          "type": "String",
+          "description": "Preset stop-loss price"
+        }
+      ]
+    },
+    {
+      "key": "transaction.get_current_plan_orders",
+      "title": "Get Current Plan Orders",
+      "category": "transaction",
+      "method": "GET",
+      "path": "/capi/v2/order/currentPlan",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/GetCurrentPendingOrders",
+      "weight_ip": 3,
+      "weight_uid": 3,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair"
+        },
+        {
+          "name": "orderId",
+          "type": "Long",
+          "required": "No",
+          "description": "OrderId  (The filter will be bypassed if invalid characters are input.)"
+        },
+        {
+          "name": "startTime",
+          "type": "Long",
+          "required": "No",
+          "description": "The record start time for the query Unix millisecond timestamp"
+        },
+        {
+          "name": "endTime",
+          "type": "Long",
+          "required": "No",
+          "description": "The end time of the record for the query Unix millisecond timestamp"
+        },
+        {
+          "name": "limit",
+          "type": "Integer",
+          "required": "No",
+          "description": "Limit number default 100 max 100"
+        },
+        {
+          "name": "page",
+          "type": "Integer",
+          "required": "No",
+          "description": "Page number  default 0"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "description": "Order amount"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "description": "Client identifier"
+        },
+        {
+          "name": "createTime",
+          "type": "String",
+          "description": "Creation time Unix millisecond timestamp"
+        },
+        {
+          "name": "filled_qty",
+          "type": "String",
+          "description": "Filled quantity"
+        },
+        {
+          "name": "fee",
+          "type": "String",
+          "description": "Transaction fee"
+        },
+        {
+          "name": "order_id",
+          "type": "String",
+          "description": "Order ID"
+        },
+        {
+          "name": "price",
+          "type": "String",
+          "description": "Order price"
+        },
+        {
+          "name": "price_avg",
+          "type": "String",
+          "description": "Average filled price"
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": "Order status: -1: Canceled. 0: Pending. 1: Partially filled. 2: Filled"
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "description": "Order Type: 1. Open long. 2: Open short. 3: Close long. 4: Close short. 5: Partial close long. 6: Partial close short. 7: Auto-deleveraging (close long). 8: Auto-deleveraging (close short). 9: Liquidation (close long). 10. Liquidation (close short)."
+        },
+        {
+          "name": "order_type",
+          "type": "String",
+          "description": "Order type: 0: Normal order. 1: Post-only. 2: Fill-Or-Kill (FOK) order. 3: Immediate-Or-Cancel (IOC) order."
+        },
+        {
+          "name": "totalProfits",
+          "type": "String",
+          "description": "Total PnL"
+        },
+        {
+          "name": "triggerPrice",
+          "type": "String",
+          "description": "Trigger price"
+        },
+        {
+          "name": "triggerPriceType",
+          "type": "String",
+          "description": "Trigger price type"
+        },
+        {
+          "name": "triggerTime",
+          "type": "String",
+          "description": "Trigger time Unix millisecond timestamp"
+        },
+        {
+          "name": "presetTakeProfitPrice",
+          "type": "String",
+          "description": "Preset take-profit price"
+        },
+        {
+          "name": "presetStopLossPrice",
+          "type": "String",
+          "description": "Preset stop-loss price"
+        }
+      ]
+    },
+    {
+      "key": "transaction.get_history_plan_orders",
+      "title": "Get History Plan Orders",
+      "category": "transaction",
+      "method": "GET",
+      "path": "/capi/v2/order/historyPlan",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/GetHistoricalPendingOrders",
+      "weight_ip": 5,
+      "weight_uid": 10,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "startTime",
+          "type": "Long",
+          "required": "No",
+          "description": "Start time Unix millisecond timestamp"
+        },
+        {
+          "name": "endTime",
+          "type": "Long",
+          "required": "No",
+          "description": "End time Unix millisecond timestamp"
+        },
+        {
+          "name": "delegateType",
+          "type": "Integer",
+          "required": "No",
+          "description": "Order type: 1: Open long. 2: Open short. 3: Close long. 4: Close short."
+        },
+        {
+          "name": "pageSize",
+          "type": "Integer",
+          "required": "No",
+          "description": "Items per page, ranging from 1 to 100, default is 100."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "description": "Order quantity"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "description": "Client identifier"
+        },
+        {
+          "name": "createTime",
+          "type": "String",
+          "description": "Creation time Unix millisecond timestamp"
+        },
+        {
+          "name": "filled_qty",
+          "type": "String",
+          "description": "Filled quantity"
+        },
+        {
+          "name": "fee",
+          "type": "String",
+          "description": "Transaction fee"
+        },
+        {
+          "name": "order_id",
+          "type": "String",
+          "description": "Order ID"
+        },
+        {
+          "name": "price",
+          "type": "String",
+          "description": "Order price"
+        },
+        {
+          "name": "price_avg",
+          "type": "String",
+          "description": "Average filled price"
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": "Order status: -1: Canceled. 0: Pending. 1: Partially filled. 2: Filled"
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "description": "Order Type: 1. Open long. 2: Open short. 3: Close long. 4: Close short. 5: Partial close long. 6: Partial close short. 7: Auto-deleveraging (close long). 8: Auto-deleveraging (close short). 9: Liquidation (close long). 10. Liquidation (close short)."
+        },
+        {
+          "name": "order_type",
+          "type": "String",
+          "description": "Order type: 0: Normal order. 1: Post-only. 2: Fill-Or-Kill (FOK) order. 3: Immediate-Or-Cancel (IOC) order."
+        },
+        {
+          "name": "totalProfits",
+          "type": "String",
+          "description": "Total PnL"
+        },
+        {
+          "name": "triggerPrice",
+          "type": "String",
+          "description": "Trigger price"
+        },
+        {
+          "name": "triggerPriceType",
+          "type": "String",
+          "description": "Trigger price type"
+        },
+        {
+          "name": "triggerTime",
+          "type": "String",
+          "description": "Trigger time Unix millisecond timestamp"
+        },
+        {
+          "name": "presetTakeProfitPrice",
+          "type": "String",
+          "description": "Preset take-profit price"
+        },
+        {
+          "name": "presetStopLossPrice",
+          "type": "String",
+          "description": "Preset stop-loss price"
+        }
+      ]
+    },
+    {
+      "key": "transaction.get_history_orders",
+      "title": "Get History Orders",
+      "category": "transaction",
+      "method": "GET",
+      "path": "/capi/v2/order/history",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/GetOrderHistory",
+      "weight_ip": 10,
+      "weight_uid": 10,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair"
+        },
+        {
+          "name": "pageSize",
+          "type": "Integer",
+          "required": "No",
+          "description": "Items per page"
+        },
+        {
+          "name": "createDate",
+          "type": "Long",
+          "required": "No",
+          "description": "The record start time for the query (must be ≤ 90 and cannot be negative) Unix millisecond timestamp"
+        },
+        {
+          "name": "endCreateDate",
+          "type": "Long",
+          "required": "No",
+          "description": "The end time of the record for the query (must be ≤ 90 and cannot be negative) Unix millisecond timestamp"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "Symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "description": "Order amount"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "description": "Client identifier"
+        },
+        {
+          "name": "createTime",
+          "type": "String",
+          "description": "Creation time Unix millisecond timestamp"
+        },
+        {
+          "name": "filled_qty",
+          "type": "String",
+          "description": "Filled quantity"
+        },
+        {
+          "name": "fee",
+          "type": "String",
+          "description": "Transaction fee"
+        },
+        {
+          "name": "order_id",
+          "type": "String",
+          "description": "Order ID"
+        },
+        {
+          "name": "price",
+          "type": "String",
+          "description": "Order price"
+        },
+        {
+          "name": "price_avg",
+          "type": "String",
+          "description": "Average filled price"
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": "Order status pending: The order has been submitted for matching, but the result has not been processed yet. open: The order has been processed by the matching engine (order placed), and may have been partially filled. filled: The order has been completely filled [final state]. canceling: The order is being canceled. canceled: The order has been canceled. It may have been partially filled. [final state]. untriggered: The conditional order has not been triggered yet."
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "description": "Order type open_long: Open long open_short: Open short close_long: Close long close_short: Close short offset_liquidate_long: Reduce position, close long offset_liquidate_short: Reduce position, close short agreement_close_long: Agreement close long agreement_close_short: Agreement close short burst_liquidate_long: Liquidation close long burst_liquidate_short: Liquidation close short"
+        },
+        {
+          "name": "order_type",
+          "type": "String",
+          "description": "Order type normal: Regular limit order, valid until canceled. postOnly: Maker-only order fok: Fill or kill, must be completely filled or canceled immediately. ioc: Immediate or cancel, fill as much as possible and cancel the remaining."
+        },
+        {
+          "name": "totalProfits",
+          "type": "String",
+          "description": "Total PnL"
+        },
+        {
+          "name": "contracts",
+          "type": "Integer",
+          "description": "Order size in contract units"
+        },
+        {
+          "name": "filledQtyContracts",
+          "type": "Integer",
+          "description": "Filled quantity in contract units"
+        },
+        {
+          "name": "presetTakeProfitPrice",
+          "type": "String",
+          "description": "Preset take-profit price"
+        },
+        {
+          "name": "presetStopLossPrice",
+          "type": "String",
+          "description": "Preset stop-loss price"
+        }
+      ]
+    },
+    {
+      "key": "transaction.get_order_info",
+      "title": "Get Order Info",
+      "category": "transaction",
+      "method": "GET",
+      "path": "/capi/v2/order/detail",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/GetSingleOrderInfo",
+      "weight_ip": 2,
+      "weight_uid": 2,
+      "request_params": [
+        {
+          "name": "orderId",
+          "type": "String",
+          "required": "Yes",
+          "description": "Order ID"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "description": "Order amount"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "description": "Client identifier"
+        },
+        {
+          "name": "createTime",
+          "type": "long",
+          "description": "Creation time Unix millisecond timestamp"
+        },
+        {
+          "name": "filled_qty",
+          "type": "String",
+          "description": "Filled quantity"
+        },
+        {
+          "name": "fee",
+          "type": "String",
+          "description": "Transaction fee"
+        },
+        {
+          "name": "order_id",
+          "type": "String",
+          "description": "Order ID"
+        },
+        {
+          "name": "price",
+          "type": "String",
+          "description": "Order price"
+        },
+        {
+          "name": "price_avg",
+          "type": "String",
+          "description": "Average filled price"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "description": "Order status pending: The order has been submitted for matching, but the result has not been processed yet. open: The order has been processed by the matching engine (order placed), and may have been partially filled. filled: The order has been completely filled [final state]. canceling: The order is being canceled. canceled: The order has been canceled. It may have been partially filled. [final state]. untriggered: The conditional order has not been triggered yet."
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "description": "Order type open_long: Open long open_short: Open short close_long: Close long close_short: Close short offset_liquidate_long: Reduce position, close long offset_liquidate_short: Reduce position, close short agreement_close_long: Agreement close long agreement_close_short: Agreement close short burst_liquidate_long: Liquidation close long burst_liquidate_short: Liquidation close short"
+        },
+        {
+          "name": "order_type",
+          "type": "string",
+          "description": "Order type normal: Regular limit order, valid until canceled. postOnly: Maker-only order fok: Fill or kill, must be completely filled or canceled immediately. ioc: Immediate or cancel, fill as much as possible and cancel the remaining."
+        },
+        {
+          "name": "totalProfits",
+          "type": "String",
+          "description": "Total PnL"
+        },
+        {
+          "name": "contracts",
+          "type": "Integer",
+          "description": "Order size in contract units"
+        },
+        {
+          "name": "filledQtyContracts",
+          "type": "Integer",
+          "description": "Filled quantity in contract units"
+        },
+        {
+          "name": "presetTakeProfitPrice",
+          "type": "String",
+          "description": "Preset take-profit price"
+        },
+        {
+          "name": "presetStopLossPrice",
+          "type": "String",
+          "description": "Preset stop-loss price"
+        }
+      ]
+    },
+    {
+      "key": "transaction.get_fills",
+      "title": "Get Fills",
+      "category": "transaction",
+      "method": "GET",
+      "path": "/capi/v2/order/fills",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/GetTradeDetails",
+      "weight_ip": 5,
+      "weight_uid": 5,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Trading pair name"
+        },
+        {
+          "name": "orderId",
+          "type": "Long",
+          "required": "No",
+          "description": "Order ID"
+        },
+        {
+          "name": "startTime",
+          "type": "Long",
+          "required": "No",
+          "description": "Start timestamp Unix millisecond timestamp"
+        },
+        {
+          "name": "endTime",
+          "type": "Long",
+          "required": "No",
+          "description": "End timestamp Unix millisecond timestamp"
+        },
+        {
+          "name": "limit",
+          "type": "Long",
+          "required": "No",
+          "description": "Number of queries: Maximum: 100, default: 100"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "list",
+          "type": "List",
+          "description": "Transaction details"
+        },
+        {
+          "name": "> tradeId",
+          "type": "Integer",
+          "description": "Filled order ID"
+        },
+        {
+          "name": "> orderId",
+          "type": "Integer",
+          "description": "Associated order ID"
+        },
+        {
+          "name": "> symbol",
+          "type": "String",
+          "description": "Trading pair name"
+        },
+        {
+          "name": "> marginMode",
+          "type": "String",
+          "description": "Margin mode"
+        },
+        {
+          "name": "> separatedMode",
+          "type": "String",
+          "description": "Separated mode"
+        },
+        {
+          "name": "> positionSide",
+          "type": "String",
+          "description": "Position direction"
+        },
+        {
+          "name": "> orderSide",
+          "type": "String",
+          "description": "Order direction"
+        },
+        {
+          "name": "> fillSize",
+          "type": "String",
+          "description": "Actual filled quantity"
+        },
+        {
+          "name": "> fillValue",
+          "type": "String",
+          "description": "Actual filled value"
+        },
+        {
+          "name": "> fillFee",
+          "type": "String",
+          "description": "Actual trading fee"
+        },
+        {
+          "name": "> liquidateFee",
+          "type": "String",
+          "description": "Closing fee"
+        },
+        {
+          "name": "> realizePnl",
+          "type": "String",
+          "description": "Actual realized PnL"
+        },
+        {
+          "name": "> direction",
+          "type": "String",
+          "description": "Actual execution direction"
+        },
+        {
+          "name": "> liquidateType",
+          "type": "String",
+          "description": "Liquidation order type"
+        },
+        {
+          "name": "> legacyOrdeDirection",
+          "type": "String",
+          "description": "Compatible with legacy order direction types"
+        },
+        {
+          "name": "> createdTime",
+          "type": "Integer",
+          "description": "Timestamp Unix millisecond timestamp"
+        },
+        {
+          "name": "nextFlag",
+          "type": "Boolean",
+          "description": "Whether more pages exist"
+        },
+        {
+          "name": "totals",
+          "type": "Integer",
+          "description": "Total entries"
+        }
+      ]
+    },
+    {
+      "key": "transaction.modify_tpsl_order",
+      "title": "Modify TP/SL Order",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/modifyTpSlOrder",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/ModifyTpSlOrder",
+      "weight_ip": 2,
+      "weight_uid": 5,
+      "request_params": [
+        {
+          "name": "orderId",
+          "type": "Long",
+          "required": "Yes",
+          "description": "Order ID of the TP/SL order to modify"
+        },
+        {
+          "name": "triggerPrice",
+          "type": "String",
+          "required": "Yes",
+          "description": "New trigger price"
+        },
+        {
+          "name": "executePrice",
+          "type": "String",
+          "required": "No",
+          "description": "New execution price. If not provided or set to 0, market price will be used. Value > 0 means limit price"
+        },
+        {
+          "name": "triggerPriceType",
+          "type": "Integer",
+          "required": "No",
+          "description": "Trigger price type: 1: Last price 3: Mark price Default is 1 (Last price)"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "code",
+          "type": "String",
+          "description": "Response code, \"00000\" indicates success"
+        },
+        {
+          "name": "msg",
+          "type": "String",
+          "description": "Response message"
+        },
+        {
+          "name": "requestTime",
+          "type": "Long",
+          "description": "return time Unix millisecond timestamp"
+        },
+        {
+          "name": "data",
+          "type": "Object",
+          "description": "Response data (null for this endpoint)"
+        }
+      ]
+    },
+    {
+      "key": "transaction.place_order",
+      "title": "Place Order",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/placeOrder",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/PlaceOrder",
+      "weight_ip": 2,
+      "weight_uid": 5,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "required": "Yes",
+          "description": "Custom order ID (no more than 40 characters)"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "required": "Yes",
+          "description": "Amount (base coin) To get the decimal places of size: Get Futures Information"
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "required": "Yes",
+          "description": "1: Open long, 2: Open short, 3: Close long, 4: Close short"
+        },
+        {
+          "name": "order_type",
+          "type": "String",
+          "required": "Yes",
+          "description": "0: Normal, 1: Post-Only, 2: Fill-Or-Kill, 3: Immediate Or Cancel"
+        },
+        {
+          "name": "match_price",
+          "type": "String",
+          "required": "Yes",
+          "description": "0: Limit price, 1: Market price"
+        },
+        {
+          "name": "price",
+          "type": "String",
+          "required": "Yes",
+          "description": "Order price (this is required for limit orders, and its accuracy and step size follow the futures information endpoint)"
+        },
+        {
+          "name": "presetTakeProfitPrice",
+          "type": "BigDecimal",
+          "required": "No",
+          "description": "Preset take-profit price"
+        },
+        {
+          "name": "presetStopLossPrice",
+          "type": "BigDecimal",
+          "required": "No",
+          "description": "Preset stop-loss price"
+        },
+        {
+          "name": "marginMode",
+          "type": "Integer",
+          "required": "No",
+          "description": "Margin mode 1: Cross Mode 3: Isolated Mode Default is 1 (Cross Mode)"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "client_oid",
+          "type": "String",
+          "description": "Client-generated order identifier"
+        },
+        {
+          "name": "order_id",
+          "type": "String",
+          "description": "Order ID"
+        }
+      ]
+    },
+    {
+      "key": "transaction.batch_orders",
+      "title": "Batch Orders",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/batchOrders",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/PlaceOrdersBatch",
+      "weight_ip": 5,
+      "weight_uid": 10,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "marginMode",
+          "type": "Integer",
+          "required": "No",
+          "description": "Margin mode 1: Cross Mode 3: Isolated Mode Default is 1 (Cross Mode)"
+        },
+        {
+          "name": "orderDataList",
+          "type": "List",
+          "required": "Yes",
+          "description": "Maximum batch processing limit of 20 orders, with the same structure as the futures placing endpoint"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "order_info",
+          "type": "List",
+          "description": "Order list"
+        },
+        {
+          "name": ">order_id",
+          "type": "String",
+          "description": "Order ID"
+        },
+        {
+          "name": ">client_oid",
+          "type": "String",
+          "description": "Customize order ID"
+        },
+        {
+          "name": ">result",
+          "type": "Boolean",
+          "description": "Order status"
+        },
+        {
+          "name": ">error_code",
+          "type": "String",
+          "description": "Error code if order placement failed"
+        },
+        {
+          "name": ">error_message",
+          "type": "String",
+          "description": "Error message if order placement failed"
+        },
+        {
+          "name": "result",
+          "type": "Boolean",
+          "description": "Request result"
+        }
+      ]
+    },
+    {
+      "key": "transaction.place_plan_order",
+      "title": "Place Trigger Order",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/plan_order",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/PlacePendingOrder",
+      "weight_ip": 2,
+      "weight_uid": 5,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "client_oid",
+          "type": "String",
+          "required": "Yes",
+          "description": "Custom order ID (≤40 chars, no special characters), must be unique in maker ordersIf left empty, the system will automatically assign a value."
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "required": "Yes",
+          "description": "Order quantity (base coin) To get the decimal places of size: Get Futures Information"
+        },
+        {
+          "name": "type",
+          "type": "String",
+          "required": "Yes",
+          "description": "1: Open long 2. Open short 3. Close long 4. Close short"
+        },
+        {
+          "name": "match_type",
+          "type": "String",
+          "required": "Yes",
+          "description": "0: Limit price, 1: Market price"
+        },
+        {
+          "name": "execute_price",
+          "type": "String",
+          "required": "Yes",
+          "description": "Execution price"
+        },
+        {
+          "name": "trigger_price",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trigger price"
+        },
+        {
+          "name": "marginMode",
+          "type": "Integer",
+          "required": "No",
+          "description": "Margin mode 1: Cross Mode 3: Isolated Mode Default is 1 (Cross Mode)"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "client_oid",
+          "type": "",
+          "description": "Client identifier"
+        },
+        {
+          "name": "order_id",
+          "type": "",
+          "description": "Conditional order ID"
+        }
+      ]
+    },
+    {
+      "key": "transaction.place_tpsl_order",
+      "title": "Place TP/SL Order",
+      "category": "transaction",
+      "method": "POST",
+      "path": "/capi/v2/order/placeTpSlOrder",
+      "doc_url": "https://www.weex.com/api-doc/contract/Transaction_API/PlaceTpSlOrder",
+      "weight_ip": 2,
+      "weight_uid": 5,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trading pair"
+        },
+        {
+          "name": "clientOrderId",
+          "type": "String",
+          "required": "Yes",
+          "description": "Custom order ID (no more than 40 characters)"
+        },
+        {
+          "name": "planType",
+          "type": "String",
+          "required": "Yes",
+          "description": "TP/SL type: profit_plan : Take-profit plan order loss_plan : Stop-loss plan order"
+        },
+        {
+          "name": "triggerPrice",
+          "type": "String",
+          "required": "Yes",
+          "description": "Trigger price"
+        },
+        {
+          "name": "executePrice",
+          "type": "String",
+          "required": "No",
+          "description": "Execution price. If not provided or set to 0, market price will be used. Value > 0 means limit price"
+        },
+        {
+          "name": "size",
+          "type": "String",
+          "required": "Yes",
+          "description": "Order quantity (base coin) To get the decimal places of size: Get Futures Information"
+        },
+        {
+          "name": "positionSide",
+          "type": "String",
+          "required": "Yes",
+          "description": "Position direction: long : Long position short : Short position"
+        },
+        {
+          "name": "marginMode",
+          "type": "Integer",
+          "required": "No",
+          "description": "Margin mode: 1: Cross Mode 3: Isolated Mode Default is 1 (Cross Mode)"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "success",
+          "type": "Boolean",
+          "description": "Whether the TP/SL order was placed successfully"
+        },
+        {
+          "name": "orderId",
+          "type": "Long",
+          "description": "Order ID (0 if failed)"
+        }
+      ]
+    }
+  ]
+}
