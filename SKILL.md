@@ -21,9 +21,6 @@ export WEEX_API_BASE="https://api-contract.weex.com"
 export WEEX_LOCALE="en-US"
 ```
 
-`WEEX_API_KEY`, `WEEX_API_SECRET`, and `WEEX_API_PASSPHRASE` are read from environment variables only.
-If any is missing, stop immediately and tell the user to set env vars. Do not try alternatives.
-
 ## Fast Path
 
 ```bash

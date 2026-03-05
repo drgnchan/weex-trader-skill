@@ -388,10 +388,10 @@ def cmd_place_order(args: argparse.Namespace, client: WeexContractClient) -> int
 def cmd_cancel_order(args: argparse.Namespace, client: WeexContractClient) -> int:
     body: Dict[str, Any] = {"symbol": normalize_contract_symbol(args.symbol)}
     if args.order_id:
-        body["order_id"] = args.order_id
+        body["orderId"] = args.order_id
     if args.client_oid:
-        body["client_oid"] = args.client_oid
-    if "order_id" not in body and "client_oid" not in body:
+        body["clientOid"] = args.client_oid
+    if "orderId" not in body and "clientOid" not in body:
         raise SystemExit("Provide at least one of --order-id or --client-oid")
 
     return execute_endpoint(
