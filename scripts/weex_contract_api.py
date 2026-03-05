@@ -16,7 +16,6 @@ import hashlib
 import hmac
 import json
 import os
-import re
 import secrets
 import time
 from dataclasses import dataclass
@@ -320,85 +319,6 @@ def normalize_contract_symbol(symbol: str) -> str:
     raise SystemExit(f"Unsupported symbol format: {symbol}. Expected like ETHUSDT or cmt_ethusdt.")
 
 
-def _extract_number(text: str, patterns: list[str], field_name: str) -> str:
-    for pat in patterns:
-        m = re.search(pat, text, flags=re.IGNORECASE)
-        if m:
-            return m.group(1)
-    raise SystemExit(f"Could not parse `{field_name}` from instruction text")
-
-
-def parse_order_instruction(text: str) -> Dict[str, Any]:
-    raw = text.strip()
-    lower = raw.lower()
-    normalized = raw.replace(";", ",")
-    normalized_lower = normalized.lower()
-
-    sym_match = re.search(r"\b([A-Za-z]{2,15}USDT)\b", normalized)
-    if sym_match:
-        symbol = normalize_contract_symbol(sym_match.group(1))
-    else:
-        # Fallback for formats like ETH/USDT or ETH-USDT
-        sym_match = re.search(r"\b([A-Za-z]{2,15})\s*[-_/]?\s*USDT\b", normalized, flags=re.IGNORECASE)
-        if not sym_match:
-            raise SystemExit("Could not parse symbol from instruction text")
-        symbol = normalize_contract_symbol(f"{sym_match.group(1)}USDT")
-
-    if any(k in lower for k in ["open short", "short", "sell short", "sell_short"]):
-        order_type = "2"
-    elif any(k in lower for k in ["open long", "long", "buy long", "buy_long"]):
-        order_type = "1"
-    elif any(k in lower for k in ["close long"]):
-        order_type = "3"
-    elif any(k in lower for k in ["close short"]):
-        order_type = "4"
-    else:
-        raise SystemExit("Could not parse side/position intent (open long/open short/close long/close short)")
-
-    if "market" in lower:
-        match_price = "1"
-        price = None
-    else:
-        # Default to limit if user gives price or explicit "limit".
-        match_price = "0"
-        price = _extract_number(
-            normalized_lower,
-            [
-                r"(?:limit|price)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)",
-            ],
-            "price",
-        )
-
-    size = _extract_number(
-        normalized_lower,
-        [
-            r"(?:size|qty|amount|volume)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)",
-        ],
-        "size",
-    )
-
-    margin_mode = None
-    if "isolated" in lower:
-        margin_mode = "3"
-    elif "cross" in lower:
-        margin_mode = "1"
-
-    body: Dict[str, Any] = {
-        "symbol": symbol,
-        "client_oid": generate_client_oid(),
-        "size": size,
-        "type": order_type,
-        "order_type": "0",
-        "match_price": match_price,
-    }
-    if price is not None:
-        body["price"] = price
-    if margin_mode is not None:
-        body["marginMode"] = margin_mode
-
-    return body
-
-
 def cmd_list_endpoints(args: argparse.Namespace) -> int:
     rows = []
     for endpoint in sorted(ENDPOINTS.values(), key=lambda e: (e.group, e.key)):
@@ -435,7 +355,7 @@ def cmd_call(args: argparse.Namespace, client: WeexContractClient) -> int:
 
 def cmd_place_order(args: argparse.Namespace, client: WeexContractClient) -> int:
     body: Dict[str, Any] = {
-        "symbol": args.symbol,
+        "symbol": normalize_contract_symbol(args.symbol),
         "client_oid": args.client_oid or generate_client_oid(),
         "size": args.size,
         "type": args.open_type,
@@ -465,24 +385,8 @@ def cmd_place_order(args: argparse.Namespace, client: WeexContractClient) -> int
     )
 
 
-def cmd_place_order_from_text(args: argparse.Namespace, client: WeexContractClient) -> int:
-    body = parse_order_instruction(args.text)
-    if args.client_oid:
-        body["client_oid"] = args.client_oid
-
-    return execute_endpoint(
-        client=client,
-        endpoint_key="transaction.place_order",
-        query={},
-        body=body,
-        dry_run=args.dry_run,
-        confirm_live=args.confirm_live,
-        pretty=args.pretty,
-    )
-
-
 def cmd_cancel_order(args: argparse.Namespace, client: WeexContractClient) -> int:
-    body: Dict[str, Any] = {"symbol": args.symbol}
+    body: Dict[str, Any] = {"symbol": normalize_contract_symbol(args.symbol)}
     if args.order_id:
         body["order_id"] = args.order_id
     if args.client_oid:
@@ -586,13 +490,6 @@ def build_parser() -> argparse.ArgumentParser:
     p_poll.add_argument("--count", type=int, default=0, help="0 means infinite")
     p_poll.add_argument("--pretty", action="store_true")
 
-    p_text_order = sub.add_parser("place-order-from-text", help="Parse natural language and place one order")
-    p_text_order.add_argument("--text", required=True, help="Natural language order instruction")
-    p_text_order.add_argument("--client-oid", default=None)
-    p_text_order.add_argument("--dry-run", action="store_true")
-    p_text_order.add_argument("--confirm-live", action="store_true")
-    p_text_order.add_argument("--pretty", action="store_true")
-
     return parser
 
 
@@ -615,8 +512,6 @@ def main() -> int:
         return cmd_call(args, client)
     if args.command == "place-order":
         return cmd_place_order(args, client)
-    if args.command == "place-order-from-text":
-        return cmd_place_order_from_text(args, client)
     if args.command == "cancel-order":
         return cmd_cancel_order(args, client)
     if args.command == "ticker":

@@ -3,7 +3,7 @@
 
 - Endpoint definitions loaded from references/spot-api-definitions.json
 - Private auth from environment variables only
-- Supports generic endpoint calls and natural-language order placement
+- Supports generic endpoint calls and deterministic order placement
 """
 
 from __future__ import annotations
@@ -14,7 +14,6 @@ import hashlib
 import hmac
 import json
 import os
-import re
 import secrets
 import time
 from dataclasses import dataclass
@@ -278,52 +277,6 @@ def generate_client_order_id() -> str:
     return f"codex-{int(time.time() * 1000)}-{secrets.token_hex(3)}"
 
 
-def extract_number(text: str, patterns: list[str], field_name: str) -> str:
-    for pat in patterns:
-        m = re.search(pat, text, flags=re.IGNORECASE)
-        if m:
-            return m.group(1)
-    raise SystemExit(f"Could not parse `{field_name}` from instruction text")
-
-
-def parse_spot_order_instruction(text: str) -> Dict[str, Any]:
-    lower = text.strip().lower()
-
-    sym_match = re.search(r"\b([a-z]{2,15}usdt)\b", lower)
-    if not sym_match:
-        sym_match = re.search(r"\b([a-z]{2,15})\s*[-_/]?\s*usdt\b", lower)
-        if not sym_match:
-            raise SystemExit("Could not parse symbol from instruction text")
-        symbol = normalize_spot_symbol(f"{sym_match.group(1)}USDT")
-    else:
-        symbol = normalize_spot_symbol(sym_match.group(1))
-
-    if any(k in lower for k in ["buy", "long"]):
-        side = "buy"
-    elif any(k in lower for k in ["sell", "short"]):
-        side = "sell"
-    else:
-        raise SystemExit("Could not parse side (buy/sell)")
-
-    order_type = "market" if "market" in lower else "limit"
-    force = "normal"
-    quantity = extract_number(lower, [r"(?:quantity|qty|size|amount)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)"], "quantity")
-
-    body: Dict[str, Any] = {
-        "symbol": symbol,
-        "side": side,
-        "orderType": order_type,
-        "force": force,
-        "quantity": quantity,
-        "clientOrderId": generate_client_order_id(),
-    }
-
-    if order_type == "limit":
-        body["price"] = extract_number(lower, [r"(?:limit|price)\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)"], "price")
-
-    return body
-
-
 def cmd_list_endpoints(args: argparse.Namespace) -> int:
     rows = []
     for ep in sorted(ENDPOINTS.values(), key=lambda e: (e.category, e.key)):
@@ -367,10 +320,22 @@ def cmd_ticker(args: argparse.Namespace, client: WeexSpotClient) -> int:
     )
 
 
-def cmd_place_order_from_text(args: argparse.Namespace, client: WeexSpotClient) -> int:
-    body = parse_spot_order_instruction(args.text)
-    if args.client_order_id:
-        body["clientOrderId"] = args.client_order_id
+def cmd_place_order(args: argparse.Namespace, client: WeexSpotClient) -> int:
+    body: Dict[str, Any] = {
+        "symbol": normalize_spot_symbol(args.symbol),
+        "side": args.side,
+        "orderType": args.order_type,
+        "force": args.force,
+        "quantity": args.quantity,
+        "clientOrderId": args.client_order_id or generate_client_order_id(),
+    }
+    if args.price is not None:
+        body["price"] = args.price
+    if body["orderType"] == "limit" and "price" not in body:
+        raise SystemExit("price is required when orderType=limit")
+    if body["orderType"] == "market" and "price" in body:
+        raise SystemExit("price must be omitted when orderType=market")
+
     return execute_endpoint(
         client=client,
         endpoint_key="spot.order.placeorder",
@@ -406,12 +371,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_ticker.add_argument("--symbol", required=True)
     p_ticker.add_argument("--pretty", action="store_true")
 
-    p_nl = sub.add_parser("place-order-from-text", help="Parse NL text and place one spot order")
-    p_nl.add_argument("--text", required=True)
-    p_nl.add_argument("--client-order-id", default=None)
-    p_nl.add_argument("--dry-run", action="store_true")
-    p_nl.add_argument("--confirm-live", action="store_true")
-    p_nl.add_argument("--pretty", action="store_true")
+    p_place = sub.add_parser("place-order", help="Convenience wrapper for spot.order.placeorder")
+    p_place.add_argument("--symbol", required=True)
+    p_place.add_argument("--side", required=True, choices=["buy", "sell"])
+    p_place.add_argument("--order-type", required=True, choices=["limit", "market"])
+    p_place.add_argument("--quantity", required=True)
+    p_place.add_argument("--price", default=None)
+    p_place.add_argument("--force", default="normal")
+    p_place.add_argument("--client-order-id", default=None)
+    p_place.add_argument("--dry-run", action="store_true")
+    p_place.add_argument("--confirm-live", action="store_true")
+    p_place.add_argument("--pretty", action="store_true")
 
     return parser
 
@@ -433,8 +403,8 @@ def main() -> int:
         return cmd_call(args, client)
     if args.command == "ticker":
         return cmd_ticker(args, client)
-    if args.command == "place-order-from-text":
-        return cmd_place_order_from_text(args, client)
+    if args.command == "place-order":
+        return cmd_place_order(args, client)
     return 1
 
 

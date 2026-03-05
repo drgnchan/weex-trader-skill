@@ -2,7 +2,7 @@
 name: weex-api-agent
 description: Use when the user wants WEEX API automation via REST for both contract and spot, including order execution from natural language, cancel/query, and market/account data retrieval.
 metadata:
-  version: "1.0.0"
+  version: "1.3.0"
 ---
 
 # WEEX API Agent
@@ -39,27 +39,25 @@ python3 scripts/weex_spot_api.py ticker --symbol BTCUSDT --pretty
 
 ## Natural Language Order
 
-Example user instruction: `Place ETHUSDT short, limit 10000, size 0.001`
+Natural language is interpreted by the agent layer.  
+Scripts no longer parse keywords from free text.
 
-Preview parse:
-
-```bash
-python3 scripts/weex_contract_api.py place-order-from-text --text "<original user text>" --dry-run --pretty
-```
-
-Submit live:
+The agent must convert user intent into structured fields, then call deterministic commands:
 
 ```bash
-python3 scripts/weex_contract_api.py place-order-from-text --text "<original user text>" --confirm-live --pretty
+# Contract (type: 1=open long, 2=open short, 3=close long, 4=close short)
+python3 scripts/weex_contract_api.py place-order \
+  --symbol ETHUSDT --size 0.001 --type 2 --match-price 0 --price 10000 --confirm-live --pretty
 
 # Spot
-python3 scripts/weex_spot_api.py place-order-from-text --text "Buy ETHUSDT limit 1000 quantity 0.01" --confirm-live --pretty
+python3 scripts/weex_spot_api.py place-order \
+  --symbol ETHUSDT --side buy --order-type limit --price 999 --quantity 0.001 --confirm-live --pretty
 ```
 
 ## Safety Policy
 
 - Never send mutating requests without `--confirm-live`.
-- Use `--dry-run` first.
+- Default flow is direct live execution (no dry-run step).
 - If instruction is ambiguous or missing fields, ask only for missing fields.
 
 ## Updates
