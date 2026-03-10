@@ -8,13 +8,13 @@ Docs root:
 - https://www.weex.com/api-doc/contract/log/changelog
 
 Key transaction endpoint:
-- `POST /capi/v2/order/placeOrder`
+- `POST /capi/v3/order`
 - https://www.weex.com/api-doc/contract/Transaction_API/PlaceOrder
 
 Other commonly used groups:
-- Market: `/capi/v2/market/*`
-- Account: `/capi/v2/account/*`
-- Transaction: `/capi/v2/order/*`
+- Market: `/capi/v3/market/*`
+- Account: `/capi/v3/account/*`
+- Transaction: `/capi/v3/*`
 
 Use the script for full live list:
 

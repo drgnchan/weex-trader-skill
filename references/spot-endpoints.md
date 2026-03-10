@@ -17,3 +17,7 @@ Quick commands:
 python3 scripts/weex_spot_api.py list-endpoints --pretty
 python3 scripts/weex_spot_api.py call --endpoint spot.market.gettickerinfo --query '{"symbol":"BTCUSDT"}' --pretty
 ```
+
+Latest trade endpoint:
+- `POST /api/v3/order`
+- https://www.weex.com/api-doc/spot/orderApi/PlaceOrder

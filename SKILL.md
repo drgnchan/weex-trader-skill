@@ -2,7 +2,7 @@
 name: weex-trader-skill
 description: Use when the user wants WEEX API automation via REST for both contract and spot, including order execution from natural language, cancel/query, and market/account data retrieval.
 metadata:
-  version: "1.4.0"
+  version: "1.6.0"
 ---
 
 # WEEX Trader Skill
@@ -26,8 +26,8 @@ export WEEX_LOCALE="en-US"
 ```bash
 # Contract
 python3 scripts/weex_contract_api.py list-endpoints --pretty
-python3 scripts/weex_contract_api.py ticker --symbol cmt_btcusdt --pretty
-python3 scripts/weex_contract_api.py poll-ticker --symbol cmt_btcusdt --interval 2 --count 30 --pretty
+python3 scripts/weex_contract_api.py ticker --symbol BTCUSDT --pretty
+python3 scripts/weex_contract_api.py poll-ticker --symbol BTCUSDT --interval 2 --count 30 --pretty
 
 # Spot
 python3 scripts/weex_spot_api.py list-endpoints --pretty
@@ -42,13 +42,15 @@ Scripts no longer parse keywords from free text.
 The agent must convert user intent into structured fields, then call deterministic commands:
 
 ```bash
-# Contract (type: 1=open long, 2=open short, 3=close long, 4=close short)
+# Contract V3
 python3 scripts/weex_contract_api.py place-order \
-  --symbol ETHUSDT --size 0.001 --type 2 --match-price 0 --price 10000 --confirm-live --pretty
+  --symbol ETHUSDT --side SELL --position-side SHORT --type LIMIT \
+  --quantity 0.001 --price 10000 --time-in-force GTC --confirm-live --pretty
 
-# Spot
+# Spot V3
 python3 scripts/weex_spot_api.py place-order \
-  --symbol ETHUSDT --side buy --order-type limit --price 999 --quantity 0.001 --confirm-live --pretty
+  --symbol ETHUSDT --side BUY --order-type LIMIT \
+  --quantity 0.001 --price 999 --time-in-force GTC --confirm-live --pretty
 ```
 
 ## Safety Policy
@@ -66,6 +68,14 @@ Users can check/apply updates:
 ```bash
 python3 scripts/skill_update.py check --repo <owner>/<repo>
 python3 scripts/skill_update.py update --repo <owner>/<repo>
+```
+
+## Regenerating API Definitions
+
+Local contract and spot definitions are generated from the live WEEX V3 docs:
+
+```bash
+python3 scripts/generate_weex_api_definitions.py --product all
 ```
 
 ## References

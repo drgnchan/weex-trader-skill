@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""WEEX Contract API helper.
+"""WEEX Contract REST API helper.
 
-Supports:
-- full contract REST endpoint catalog (market/account/transaction)
-- HMAC SHA256 + Base64 signing for private endpoints
-- safe live-trading guardrails (`--confirm-live` required for mutating endpoints)
-- convenience commands for common operations
+- Endpoint definitions loaded from references/contract-api-definitions.json
+- Private auth from environment variables only
+- Supports generic endpoint calls and deterministic convenience commands
 """
 
 from __future__ import annotations
@@ -19,6 +17,7 @@ import os
 import secrets
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Dict, Optional
 from urllib import error, parse, request
 
@@ -40,51 +39,28 @@ class Endpoint:
     doc_url: str
 
 
-ENDPOINTS: Dict[str, Endpoint] = {
-    # Market
-    "market.get_all_tickers": Endpoint("market.get_all_tickers", "market", "Get All Ticker", "GET", "/capi/v2/market/tickers", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetAllTickerInfo"),
-    "market.get_funding_history": Endpoint("market.get_funding_history", "market", "Get Historical Funding Rates", "GET", "/capi/v2/market/getHistoryFundRate", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetContractFundingHistory"),
-    "market.get_contract_info": Endpoint("market.get_contract_info", "market", "Get Futures Information", "GET", "/capi/v2/market/contracts", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetContractInfo"),
-    "market.get_currency_index": Endpoint("market.get_currency_index", "market", "Get Cryptocurrency Index", "GET", "/capi/v2/market/index", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetCurrencyIndex"),
-    "market.get_current_fund_rate": Endpoint("market.get_current_fund_rate", "market", "Get Current Funding Rate", "GET", "/capi/v2/market/currentFundRate", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetCurrentFundRate"),
-    "market.get_depth": Endpoint("market.get_depth", "market", "Get OrderBook Depth", "GET", "/capi/v2/market/depth", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetDepthData"),
-    "market.get_history_candles": Endpoint("market.get_history_candles", "market", "Get Historical Candlestick", "GET", "/capi/v2/market/historyCandles", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetHistoryKLineData"),
-    "market.get_candles": Endpoint("market.get_candles", "market", "Get Candlestick Data", "GET", "/capi/v2/market/candles", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetKLineData"),
-    "market.get_next_funding_time": Endpoint("market.get_next_funding_time", "market", "Get Next Funding Time", "GET", "/capi/v2/market/funding_time", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetNextContractSettlementTime"),
-    "market.get_server_time": Endpoint("market.get_server_time", "market", "Get Server Time", "GET", "/capi/v2/market/time", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetServerTime"),
-    "market.get_ticker": Endpoint("market.get_ticker", "market", "Get Single Ticker", "GET", "/capi/v2/market/ticker", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetTickerInfo"),
-    "market.get_open_interest": Endpoint("market.get_open_interest", "market", "Get Open Interest", "GET", "/capi/v2/market/open_interest", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetTotalPlatformOpenInterest"),
-    "market.get_trades": Endpoint("market.get_trades", "market", "Get Trades", "GET", "/capi/v2/market/trades", False, False, "https://www.weex.com/api-doc/contract/Market_API/GetTradeData"),
-    # Account
-    "account.adjust_leverage": Endpoint("account.adjust_leverage", "account", "Change Leverage", "POST", "/capi/v2/account/leverage", True, True, "https://www.weex.com/api-doc/contract/Account_API/AdjustLeverage"),
-    "account.adjust_margin": Endpoint("account.adjust_margin", "account", "Adjust Position Margin", "POST", "/capi/v2/account/adjustMargin", True, True, "https://www.weex.com/api-doc/contract/Account_API/AdjustMargin"),
-    "account.get_accounts": Endpoint("account.get_accounts", "account", "Get Account List", "GET", "/capi/v2/account/getAccounts", True, False, "https://www.weex.com/api-doc/contract/Account_API/AllContractAccountsInfo"),
-    "account.auto_add_margin": Endpoint("account.auto_add_margin", "account", "Automatic Margin Top-Up", "POST", "/capi/v2/account/modifyAutoAppendMargin", True, True, "https://www.weex.com/api-doc/contract/Account_API/AutoAddMargin"),
-    "account.get_assets": Endpoint("account.get_assets", "account", "Get Account Assets", "GET", "/capi/v2/account/assets", True, False, "https://www.weex.com/api-doc/contract/Account_API/GetAccountBalance"),
-    "account.get_all_positions": Endpoint("account.get_all_positions", "account", "Get All Positions", "GET", "/capi/v2/account/position/allPosition", True, False, "https://www.weex.com/api-doc/contract/Account_API/GetAllContractPositions"),
-    "account.get_bills": Endpoint("account.get_bills", "account", "Get Contract Account Bills", "POST", "/capi/v2/account/bills", True, False, "https://www.weex.com/api-doc/contract/Account_API/GetContractBills"),
-    "account.get_single_position": Endpoint("account.get_single_position", "account", "Get Single Position", "GET", "/capi/v2/account/position/singlePosition", True, False, "https://www.weex.com/api-doc/contract/Account_API/GetSingleContractPosition"),
-    "account.get_settings": Endpoint("account.get_settings", "account", "Get User Settings", "GET", "/capi/v2/account/settings", True, False, "https://www.weex.com/api-doc/contract/Account_API/GetSingleContractUserConfig"),
-    "account.get_account": Endpoint("account.get_account", "account", "Get Single Account", "GET", "/capi/v2/account/getAccount", True, False, "https://www.weex.com/api-doc/contract/Account_API/GetUserSingleAssetInfo"),
-    "account.change_hold_mode": Endpoint("account.change_hold_mode", "account", "Modify User Account Mode", "POST", "/capi/v2/account/position/changeHoldModel", True, True, "https://www.weex.com/api-doc/contract/Account_API/ModifyUserAccountMode"),
-    # Transaction
-    "transaction.cancel_all_orders": Endpoint("transaction.cancel_all_orders", "transaction", "Cancel All Orders", "POST", "/capi/v2/order/cancelAllOrders", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/CancelAllOrders"),
-    "transaction.cancel_order": Endpoint("transaction.cancel_order", "transaction", "Cancel Order", "POST", "/capi/v2/order/cancel_order", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/CancelOrder"),
-    "transaction.cancel_batch_orders": Endpoint("transaction.cancel_batch_orders", "transaction", "Batch Cancel Orders", "POST", "/capi/v2/order/cancel_batch_orders", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/CancelOrdersBatch"),
-    "transaction.cancel_plan_order": Endpoint("transaction.cancel_plan_order", "transaction", "Cancel Trigger Order", "POST", "/capi/v2/order/cancel_plan", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/CancelPendingOrder"),
-    "transaction.close_positions": Endpoint("transaction.close_positions", "transaction", "Close All Positions", "POST", "/capi/v2/order/closePositions", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/ClosePositions"),
-    "transaction.get_current_orders": Endpoint("transaction.get_current_orders", "transaction", "Get Current Orders", "GET", "/capi/v2/order/current", True, False, "https://www.weex.com/api-doc/contract/Transaction_API/GetCurrentOrderStatus"),
-    "transaction.get_current_plan_orders": Endpoint("transaction.get_current_plan_orders", "transaction", "Get Current Plan Orders", "GET", "/capi/v2/order/currentPlan", True, False, "https://www.weex.com/api-doc/contract/Transaction_API/GetCurrentPendingOrders"),
-    "transaction.get_history_plan_orders": Endpoint("transaction.get_history_plan_orders", "transaction", "Get History Plan Orders", "GET", "/capi/v2/order/historyPlan", True, False, "https://www.weex.com/api-doc/contract/Transaction_API/GetHistoricalPendingOrders"),
-    "transaction.get_history_orders": Endpoint("transaction.get_history_orders", "transaction", "Get History Orders", "GET", "/capi/v2/order/history", True, False, "https://www.weex.com/api-doc/contract/Transaction_API/GetOrderHistory"),
-    "transaction.get_order_info": Endpoint("transaction.get_order_info", "transaction", "Get Order Info", "GET", "/capi/v2/order/detail", True, False, "https://www.weex.com/api-doc/contract/Transaction_API/GetSingleOrderInfo"),
-    "transaction.get_fills": Endpoint("transaction.get_fills", "transaction", "Get Fills", "GET", "/capi/v2/order/fills", True, False, "https://www.weex.com/api-doc/contract/Transaction_API/GetTradeDetails"),
-    "transaction.modify_tpsl_order": Endpoint("transaction.modify_tpsl_order", "transaction", "Modify TP/SL Order", "POST", "/capi/v2/order/modifyTpSlOrder", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/ModifyTpSlOrder"),
-    "transaction.place_order": Endpoint("transaction.place_order", "transaction", "Place Order", "POST", "/capi/v2/order/placeOrder", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/PlaceOrder"),
-    "transaction.batch_orders": Endpoint("transaction.batch_orders", "transaction", "Batch Orders", "POST", "/capi/v2/order/batchOrders", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/PlaceOrdersBatch"),
-    "transaction.place_plan_order": Endpoint("transaction.place_plan_order", "transaction", "Place Trigger Order", "POST", "/capi/v2/order/plan_order", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/PlacePendingOrder"),
-    "transaction.place_tpsl_order": Endpoint("transaction.place_tpsl_order", "transaction", "Place TP/SL Order", "POST", "/capi/v2/order/placeTpSlOrder", True, True, "https://www.weex.com/api-doc/contract/Transaction_API/PlaceTpSlOrder"),
-}
+def load_endpoint_map() -> Dict[str, Endpoint]:
+    refs = Path(__file__).resolve().parent.parent / "references" / "contract-api-definitions.json"
+    obj = json.loads(refs.read_text(encoding="utf-8"))
+    endpoint_map: Dict[str, Endpoint] = {}
+    for d in obj.get("definitions", []):
+        method = d.get("method", "GET").upper()
+        auth = bool(d.get("requires_auth", False))
+        ep = Endpoint(
+            key=d["key"],
+            group=d.get("category", ""),
+            title=d.get("title", ""),
+            method=method,
+            path=d.get("path", ""),
+            auth=auth,
+            mutating=auth and method in {"POST", "PUT", "DELETE"},
+            doc_url=d.get("doc_url", ""),
+        )
+        endpoint_map[ep.key] = ep
+    return endpoint_map
+
+
+ENDPOINTS = load_endpoint_map()
 
 
 def parse_json_arg(raw: str, arg_name: str) -> Dict[str, Any]:
@@ -309,14 +285,25 @@ def generate_client_oid() -> str:
     return f"codex-{int(time.time() * 1000)}-{secrets.token_hex(3)}"
 
 
-def normalize_contract_symbol(symbol: str) -> str:
-    s = symbol.strip().lower().replace("-", "").replace("/", "").replace(" ", "")
-    if s.startswith("cmt_"):
+def find_endpoint_key_by_doc_suffix(doc_suffix: str) -> str:
+    target = f"/{doc_suffix}"
+    for endpoint in ENDPOINTS.values():
+        if endpoint.doc_url.endswith(target):
+            return endpoint.key
+    raise SystemExit(f"Unable to find endpoint with doc suffix {doc_suffix}")
+
+
+def normalize_contract_trade_symbol(symbol: str) -> str:
+    s = symbol.strip().upper().replace("-", "").replace("/", "").replace(" ", "").replace("_", "")
+    if s.startswith("CMT") and s.endswith("USDT"):
+        s = s[3:]
+    if s.endswith("USDT") and len(s) > 4:
         return s
-    s = s.replace("_", "")
-    if s.endswith("usdt"):
-        return f"cmt_{s}"
-    raise SystemExit(f"Unsupported symbol format: {symbol}. Expected like ETHUSDT or cmt_ethusdt.")
+    raise SystemExit(f"Unsupported symbol format: {symbol}. Expected like ETHUSDT.")
+
+
+def normalize_contract_symbol(symbol: str) -> str:
+    return normalize_contract_trade_symbol(symbol)
 
 
 def cmd_list_endpoints(args: argparse.Namespace) -> int:
@@ -355,28 +342,40 @@ def cmd_call(args: argparse.Namespace, client: WeexContractClient) -> int:
 
 def cmd_place_order(args: argparse.Namespace, client: WeexContractClient) -> int:
     body: Dict[str, Any] = {
-        "symbol": normalize_contract_symbol(args.symbol),
-        "client_oid": args.client_oid or generate_client_oid(),
-        "size": args.size,
-        "type": args.open_type,
-        "order_type": args.order_type,
-        "match_price": args.match_price,
+        "symbol": normalize_contract_trade_symbol(args.symbol),
+        "side": args.side.upper(),
+        "positionSide": args.position_side.upper(),
+        "type": args.order_type.upper(),
+        "quantity": args.quantity,
+        "newClientOrderId": args.new_client_order_id or generate_client_oid(),
     }
     if args.price is not None:
         body["price"] = args.price
-    if args.preset_take_profit_price is not None:
-        body["presetTakeProfitPrice"] = args.preset_take_profit_price
-    if args.preset_stop_loss_price is not None:
-        body["presetStopLossPrice"] = args.preset_stop_loss_price
-    if args.margin_mode is not None:
-        body["marginMode"] = args.margin_mode
+    if args.time_in_force is not None:
+        body["timeInForce"] = args.time_in_force.upper()
+    if args.tp_trigger_price is not None:
+        body["tpTriggerPrice"] = args.tp_trigger_price
+    if args.sl_trigger_price is not None:
+        body["slTriggerPrice"] = args.sl_trigger_price
+    if args.tp_working_type is not None:
+        body["TpWorkingType"] = args.tp_working_type.upper()
+    if args.sl_working_type is not None:
+        body["SlWorkingType"] = args.sl_working_type.upper()
 
-    if body["match_price"] == "0" and "price" not in body:
-        raise SystemExit("price is required when match_price=0 (limit order)")
+    if body["type"] == "LIMIT":
+        if "price" not in body:
+            raise SystemExit("price is required when type=LIMIT")
+        if "timeInForce" not in body:
+            raise SystemExit("time-in-force is required when type=LIMIT")
+    else:
+        if "price" in body:
+            raise SystemExit("price must be omitted when type=MARKET")
+        if "timeInForce" in body:
+            raise SystemExit("time-in-force must be omitted when type=MARKET")
 
     return execute_endpoint(
         client=client,
-        endpoint_key="transaction.place_order",
+        endpoint_key=find_endpoint_key_by_doc_suffix("PlaceOrder"),
         query={},
         body=body,
         dry_run=args.dry_run,
@@ -386,19 +385,19 @@ def cmd_place_order(args: argparse.Namespace, client: WeexContractClient) -> int
 
 
 def cmd_cancel_order(args: argparse.Namespace, client: WeexContractClient) -> int:
-    body: Dict[str, Any] = {"symbol": normalize_contract_symbol(args.symbol)}
+    query: Dict[str, Any] = {}
     if args.order_id:
-        body["orderId"] = args.order_id
+        query["orderId"] = args.order_id
     if args.client_oid:
-        body["clientOid"] = args.client_oid
-    if "orderId" not in body and "clientOid" not in body:
+        query["origClientOrderId"] = args.client_oid
+    if not query:
         raise SystemExit("Provide at least one of --order-id or --client-oid")
 
     return execute_endpoint(
         client=client,
-        endpoint_key="transaction.cancel_order",
-        query={},
-        body=body,
+        endpoint_key=find_endpoint_key_by_doc_suffix("CancelOrder"),
+        query=query,
+        body={},
         dry_run=args.dry_run,
         confirm_live=args.confirm_live,
         pretty=args.pretty,
@@ -408,8 +407,8 @@ def cmd_cancel_order(args: argparse.Namespace, client: WeexContractClient) -> in
 def cmd_ticker(args: argparse.Namespace, client: WeexContractClient) -> int:
     return execute_endpoint(
         client=client,
-        endpoint_key="market.get_ticker",
-        query={"symbol": args.symbol},
+        endpoint_key=find_endpoint_key_by_doc_suffix("GetSymbolPrice"),
+        query={"symbol": normalize_contract_symbol(args.symbol)},
         body={},
         dry_run=False,
         confirm_live=False,
@@ -423,8 +422,8 @@ def cmd_poll_ticker(args: argparse.Namespace, client: WeexContractClient) -> int
         run_count += 1
         code = execute_endpoint(
             client=client,
-            endpoint_key="market.get_ticker",
-            query={"symbol": args.symbol},
+            endpoint_key=find_endpoint_key_by_doc_suffix("GetSymbolPrice"),
+            query={"symbol": normalize_contract_symbol(args.symbol)},
             body={},
             dry_run=False,
             confirm_live=False,
@@ -442,11 +441,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--base-url", default=os.getenv("WEEX_API_BASE", DEFAULT_BASE_URL))
     parser.add_argument("--locale", default=os.getenv("WEEX_LOCALE", DEFAULT_LOCALE))
     parser.add_argument("--timeout", type=float, default=float(os.getenv("WEEX_API_TIMEOUT", DEFAULT_TIMEOUT)))
+    groups = sorted({endpoint.group for endpoint in ENDPOINTS.values() if endpoint.group})
 
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_list = sub.add_parser("list-endpoints", help="List all supported contract REST endpoints")
-    p_list.add_argument("--group", choices=["market", "account", "transaction"], default=None)
+    p_list.add_argument("--group", choices=groups, default=None)
     p_list.add_argument("--pretty", action="store_true")
 
     p_call = sub.add_parser("call", help="Call an endpoint by key with JSON query/body")
@@ -457,23 +457,24 @@ def build_parser() -> argparse.ArgumentParser:
     p_call.add_argument("--confirm-live", action="store_true", help="Allow live mutating requests")
     p_call.add_argument("--pretty", action="store_true")
 
-    p_place = sub.add_parser("place-order", help="Convenience wrapper for transaction.place_order")
+    p_place = sub.add_parser("place-order", help="Convenience wrapper for the live contract PlaceOrder doc")
     p_place.add_argument("--symbol", required=True)
-    p_place.add_argument("--size", required=True)
-    p_place.add_argument("--type", dest="open_type", required=True, help="1:open-long 2:open-short 3:close-long 4:close-short")
-    p_place.add_argument("--order-type", default="0", help="0:normal 1:post_only 2:fok 3:ioc")
-    p_place.add_argument("--match-price", default="0", help="0:limit 1:market")
+    p_place.add_argument("--side", required=True, choices=["BUY", "SELL", "buy", "sell"])
+    p_place.add_argument("--position-side", required=True, choices=["LONG", "SHORT", "long", "short"])
+    p_place.add_argument("--type", dest="order_type", required=True, choices=["LIMIT", "MARKET", "limit", "market"])
+    p_place.add_argument("--quantity", required=True)
     p_place.add_argument("--price", default=None)
-    p_place.add_argument("--client-oid", default=None)
-    p_place.add_argument("--preset-take-profit-price", default=None)
-    p_place.add_argument("--preset-stop-loss-price", default=None)
-    p_place.add_argument("--margin-mode", default=None, help="1:cross 3:isolated")
+    p_place.add_argument("--time-in-force", default=None, choices=["GTC", "IOC", "FOK", "gtc", "ioc", "fok"])
+    p_place.add_argument("--new-client-order-id", default=None)
+    p_place.add_argument("--tp-trigger-price", default=None)
+    p_place.add_argument("--sl-trigger-price", default=None)
+    p_place.add_argument("--tp-working-type", default=None, choices=["CONTRACT_PRICE", "MARK_PRICE", "contract_price", "mark_price"])
+    p_place.add_argument("--sl-working-type", default=None, choices=["CONTRACT_PRICE", "MARK_PRICE", "contract_price", "mark_price"])
     p_place.add_argument("--dry-run", action="store_true")
     p_place.add_argument("--confirm-live", action="store_true")
     p_place.add_argument("--pretty", action="store_true")
 
-    p_cancel = sub.add_parser("cancel-order", help="Convenience wrapper for transaction.cancel_order")
-    p_cancel.add_argument("--symbol", required=True)
+    p_cancel = sub.add_parser("cancel-order", help="Convenience wrapper for the live contract CancelOrder doc")
     p_cancel.add_argument("--order-id", default=None)
     p_cancel.add_argument("--client-oid", default=None)
     p_cancel.add_argument("--dry-run", action="store_true")

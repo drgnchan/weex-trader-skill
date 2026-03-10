@@ -1,56 +1,123 @@
 {
-  "generated_at": "2026-03-05",
-  "base_url": "https://api-spot.weex.com",
-  "count": 28,
+  "generated_at": "2026-03-10",
+  "source": "https://www.weex.com/api-doc/sitemap.xml",
+  "product": "spot",
   "definitions": [
     {
-      "key": "spot.account.getaccountbalance",
-      "title": "Get Account Assets",
+      "key": "spot.account.get_account_balance",
+      "title": "Get Account Information (USER_DATA)",
       "category": "account",
       "method": "GET",
-      "path": "/api/v2/account/assets",
+      "path": "/api/v3/account/",
       "doc_url": "https://www.weex.com/api-doc/spot/AccountAPI/GetAccountBalance",
       "requires_auth": true,
-      "request_params": [
+      "request_params": [],
+      "response_params": [
         {
-          "name": "coinId",
+          "name": "makerCommission",
           "type": "Integer",
-          "required": "Crypto ID",
-          "description": ""
+          "description": "User-level maker fee rate (basis points)."
         },
         {
-          "name": "coinName",
-          "type": "String",
-          "required": "Name of the crypto",
-          "description": ""
+          "name": "takerCommission",
+          "type": "Integer",
+          "description": "User-level taker fee rate (basis points)."
         },
         {
-          "name": "available",
+          "name": "commissionRates.maker",
           "type": "String",
-          "required": "Available asset",
-          "description": ""
+          "description": "Maker fee rate as a decimal string."
         },
         {
-          "name": "frozen",
+          "name": "commissionRates.taker",
           "type": "String",
-          "required": "Frozen asset",
-          "description": ""
+          "description": "Taker fee rate as a decimal string."
         },
         {
-          "name": "equity",
+          "name": "canTrade",
+          "type": "Boolean",
+          "description": "Whether trading is enabled."
+        },
+        {
+          "name": "canWithdraw",
+          "type": "Boolean",
+          "description": "Whether withdrawals are enabled."
+        },
+        {
+          "name": "canDeposit",
+          "type": "Boolean",
+          "description": "Whether deposits are enabled."
+        },
+        {
+          "name": "brokered",
+          "type": "Boolean",
+          "description": "Whether the account is broker managed."
+        },
+        {
+          "name": "requireSelfTradePrevention",
+          "type": "Boolean",
+          "description": "Whether self-trade prevention is enforced."
+        },
+        {
+          "name": "preventSor",
+          "type": "Boolean",
+          "description": "Whether smart order routing is disabled."
+        },
+        {
+          "name": "updateTime",
+          "type": "Long",
+          "description": "Last account update time (ms)."
+        },
+        {
+          "name": "accountType",
           "type": "String",
-          "required": "Total asset",
-          "description": ""
+          "description": "Account type, e.g. SPOT ."
+        },
+        {
+          "name": "balances",
+          "type": "Array<Object>",
+          "description": "Asset balances."
+        },
+        {
+          "name": "-> asset",
+          "type": "String",
+          "description": "Asset symbol."
+        },
+        {
+          "name": "-> free",
+          "type": "String",
+          "description": "Free balance."
+        },
+        {
+          "name": "-> locked",
+          "type": "String",
+          "description": "Locked balance."
+        },
+        {
+          "name": "permissions",
+          "type": "Array<String>",
+          "description": "Granted permissions (e.g. SPOT_TRADING )."
+        },
+        {
+          "name": "uid",
+          "type": "Long",
+          "description": "Account UID."
+        },
+        {
+          "name": "symbolCommissions",
+          "type": "Object",
+          "description": "Per-symbol maker/taker commission overrides."
         }
       ],
-      "response_params": []
+      "weight_ip": 5,
+      "weight_uid": 5
     },
     {
-      "key": "spot.account.getbillrecords",
-      "title": "Get Spot Account Bills",
+      "key": "spot.account.get_bill_records",
+      "title": "Get Spot Account Bills (USER_DATA)",
       "category": "account",
       "method": "POST",
-      "path": "/api/v2/account/bills",
+      "path": "/api/v3/account/bills",
       "doc_url": "https://www.weex.com/api-doc/spot/AccountAPI/GetBillRecords",
       "requires_auth": true,
       "request_params": [
@@ -58,92 +125,94 @@
           "name": "coinId",
           "type": "Integer",
           "required": "No",
-          "description": "Crypto ID"
+          "description": "Filter by asset ID."
         },
         {
           "name": "bizType",
           "type": "String",
           "required": "No",
-          "description": "Business type deposit: Deposit withdraw: Withdrawal transfer_in: Transfer-in transfer_out: Transfer-out trade_in: Asset purchase trade_out: Asset sale rake_back_reward: Commission rebate reward airdrop_reward: Financial airdrop reward rr_agent_reward: Referral commission reward launch_pad_airdrop_in: LaunchPool airdrop transfer in launch_pad_airdrop_out: LaunchPool airdrop transfer out system_issued: System issued airdrop_reward_for_product_activity: Product activity airdrop reward red_packet_create: Red packet creation red_packet_claim: Red packet claim red_packet_refund: Red packet refund"
+          "description": "Business type filter (e.g. deposit , withdraw , trade_out )."
         },
         {
           "name": "after",
           "type": "Long",
           "required": "No",
-          "description": "Records created AFTER this timestamp"
+          "description": "Return records created after this bill ID."
         },
         {
           "name": "before",
           "type": "Long",
           "required": "No",
-          "description": "Records created BEFORE this timestamp"
+          "description": "Return records created before this bill ID."
         },
         {
           "name": "limit",
           "type": "Integer",
           "required": "No",
-          "description": "Number of results, default: 10, maximum: 100."
+          "description": "Number of records to return (default 10 , maximum 100 )."
         }
       ],
       "response_params": [
         {
           "name": "billId",
           "type": "String",
-          "description": "Bill ID"
+          "description": "Bill identifier."
         },
         {
           "name": "coinId",
           "type": "Integer",
-          "description": "Currency ID"
+          "description": "Asset ID."
         },
         {
           "name": "coinName",
           "type": "String",
-          "description": "Currency name"
+          "description": "Asset symbol."
         },
         {
           "name": "bizType",
           "type": "String",
-          "description": "Business type"
+          "description": "Business type."
         },
         {
           "name": "fillSize",
           "type": "String",
-          "description": "Filled quantity"
+          "description": "Filled quantity (if applicable)."
         },
         {
           "name": "fillValue",
           "type": "String",
-          "description": "Filled value"
+          "description": "Filled value (if applicable)."
         },
         {
           "name": "deltaAmount",
           "type": "String",
-          "description": "Balance change amount"
+          "description": "Amount change."
         },
         {
           "name": "afterAmount",
           "type": "String",
-          "description": "Post-transaction balance"
+          "description": "Balance after the change."
         },
         {
           "name": "fees",
           "type": "String",
-          "description": "Transaction fee"
+          "description": "Fees charged."
         },
         {
           "name": "cTime",
           "type": "String",
-          "description": "Creation timestamp"
+          "description": "Creation time (ms)."
         }
-      ]
+      ],
+      "weight_ip": 5,
+      "weight_uid": 5
     },
     {
-      "key": "spot.account.getfundbillrecords",
-      "title": "Get Funding Account Bill",
+      "key": "spot.account.get_fund_bill_records",
+      "title": "Get Funding Account Bills (USER_DATA)",
       "category": "account",
       "method": "POST",
-      "path": "/api/v2/account/fundingBills",
+      "path": "/api/v3/account/fundingBills",
       "doc_url": "https://www.weex.com/api-doc/spot/AccountAPI/GetFundBillRecords",
       "requires_auth": true,
       "request_params": [
@@ -151,97 +220,80 @@
           "name": "coinId",
           "type": "Integer",
           "required": "No",
-          "description": "Currency ID"
+          "description": "Asset ID filter."
+        },
+        {
+          "name": "bizType",
+          "type": "String",
+          "required": "No",
+          "description": "Business type filter."
         },
         {
           "name": "startTime",
           "type": "Long",
           "required": "No",
-          "description": "Records created after start time"
+          "description": "Start time (ms)."
         },
         {
           "name": "endTime",
           "type": "Long",
           "required": "No",
-          "description": "Records created before end time"
+          "description": "End time (ms)."
         },
         {
           "name": "pageIndex",
           "type": "Integer",
           "required": "No",
-          "description": "Page number, default 1"
+          "description": "Page number (default 1)."
         },
         {
           "name": "pageSize",
           "type": "Integer",
           "required": "No",
-          "description": "Number of results to return, default 10, maximum 100"
+          "description": "Page size (default 10, maximum 100)."
         }
       ],
       "response_params": [
         {
           "name": "total",
-          "type": "Integer",
-          "description": "Total number of records"
-        },
-        {
-          "name": "page",
-          "type": "Integer",
-          "description": "Current page number"
+          "type": "Long",
+          "description": "Total number of records."
         },
         {
           "name": "pageSize",
           "type": "Integer",
-          "description": "Page size"
+          "description": "Page size."
+        },
+        {
+          "name": "pages",
+          "type": "Integer",
+          "description": "Total number of pages."
+        },
+        {
+          "name": "page",
+          "type": "Integer",
+          "description": "Current page number."
         },
         {
           "name": "hasNextPage",
           "type": "Boolean",
-          "description": "Whether there is a next page"
+          "description": "Whether another page is available."
         },
         {
-          "name": ">billId",
-          "type": "String",
-          "description": "Bill ID"
-        },
-        {
-          "name": ">coinId",
-          "type": "Integer",
-          "description": "Currency ID"
-        },
-        {
-          "name": ">coinName",
-          "type": "String",
-          "description": "Currency name"
-        },
-        {
-          "name": "bizType",
-          "type": "String",
-          "description": "Business type deposit: Deposit buy_success: Buy coin success sell_cancel: Sell cancel withdraw_freeze: Withdrawal freeze withdraw_complete: Withdrawal complete withdraw_failed: Withdrawal failed sell_freeze: Sell freeze sell_complete: Sell complete transfer_in: Transfer in transfer_out: Transfer out internal_deposit: Internal deposit internal_withdraw: Internal withdrawal interest_receive: Interest receive wxt_retrieve: WXT staking asset retrieval wxt_lock: WXT lock wxt_unlock: WXT unlock wxt_lock_reward: WXT staking reward c2c_buy: P2P buy c2c_sell: P2P sell c2c_freeze: P2P freeze c2c_unfreeze: P2P unfreeze"
-        },
-        {
-          "name": ">afterAmount",
-          "type": "String",
-          "description": "Post-transaction balance"
-        },
-        {
-          "name": ">fees",
-          "type": "String",
-          "description": "Transaction fee"
-        },
-        {
-          "name": ">cTime",
-          "type": "String",
-          "description": "Creation timestamp"
+          "name": "items",
+          "type": "Array<Object>",
+          "description": "List of bill entries (see Get Spot Account Bills for field details)."
         }
-      ]
+      ],
+      "weight_ip": 5,
+      "weight_uid": 5
     },
     {
-      "key": "spot.account.transferrecords",
-      "title": "Get Transfer Record",
+      "key": "spot.account.transfer_records",
+      "title": "Get Transfer Records (USER_DATA)",
       "category": "account",
       "method": "GET",
-      "path": "/api/v2/account/transferRecords",
+      "path": "/api/v3/account/transferRecords",
       "doc_url": "https://www.weex.com/api-doc/spot/AccountAPI/TransferRecords",
       "requires_auth": true,
       "request_params": [
@@ -249,196 +301,197 @@
           "name": "coinId",
           "type": "Integer",
           "required": "No",
-          "description": "Crypto ID"
+          "description": "Filter by asset ID."
         },
         {
           "name": "fromType",
           "type": "String",
           "required": "No",
-          "description": "Account type (accountType)"
-        },
-        {
-          "name": "after",
-          "type": "Long",
-          "required": "No",
-          "description": "Pass to tradeTime and retrieve the data before this tradeTime."
-        },
-        {
-          "name": "before",
-          "type": "Long",
-          "required": "No",
-          "description": "Pass to tradeTime and retrieve the data after this tradeTime."
+          "description": "Source account type."
         },
         {
           "name": "limit",
           "type": "Integer",
           "required": "No",
-          "description": "Number of results, default: 100, maximum: 500."
+          "description": "Number of records to return (default 100)."
+        },
+        {
+          "name": "after",
+          "type": "Long",
+          "required": "No",
+          "description": "Return records after this time (ms)."
+        },
+        {
+          "name": "before",
+          "type": "Long",
+          "required": "No",
+          "description": "Return records before this time (ms)."
         }
       ],
       "response_params": [
         {
           "name": "coinName",
-          "type": "Name of the crypto",
-          "description": ""
+          "type": "String",
+          "description": "Asset symbol."
         },
         {
           "name": "status",
-          "type": "Transfer status",
-          "description": ""
+          "type": "String",
+          "description": "Transfer status."
         },
         {
           "name": "toType",
-          "type": "Recipient account type (accountType)",
-          "description": ""
+          "type": "String",
+          "description": "Destination account type."
         },
         {
           "name": "toSymbol",
-          "type": "Trading pair of the recipient account",
-          "description": ""
+          "type": "String",
+          "description": "Destination symbol (if applicable)."
         },
         {
           "name": "fromType",
-          "type": "Sender account type (accountType)",
-          "description": ""
+          "type": "String",
+          "description": "Source account type."
         },
         {
           "name": "fromSymbol",
-          "type": "Trading pair of the sender account",
-          "description": ""
+          "type": "String",
+          "description": "Source symbol (if applicable)."
         },
         {
           "name": "amount",
-          "type": "Quantity",
-          "description": ""
+          "type": "String",
+          "description": "Transfer amount."
         },
         {
           "name": "tradeTime",
-          "type": "Time of trade (timestamp in milliseconds)",
-          "description": ""
+          "type": "String",
+          "description": "Transfer time (ms)."
         }
-      ]
+      ],
+      "weight_ip": 3,
+      "weight_uid": 3
     },
     {
-      "key": "spot.config.currencyinfo",
-      "title": "Basic Crypto Information",
+      "key": "spot.config.currency_info",
+      "title": "Get Coin Information",
       "category": "config",
       "method": "GET",
-      "path": "/api/v2/public/currencies",
+      "path": "/api/v3/coins",
       "doc_url": "https://www.weex.com/api-doc/spot/ConfigAPI/CurrencyInfo",
       "requires_auth": false,
-      "request_params": [
+      "request_params": [],
+      "response_params": [
         {
-          "name": "coinId",
-          "type": "Crypto ID",
-          "required": "",
-          "description": ""
+          "name": "coin",
+          "type": "String",
+          "description": "Coin symbol, e.g. BTC ."
         },
         {
-          "name": "coinName",
-          "type": "Name of the crypto",
-          "required": "",
-          "description": ""
+          "name": "name",
+          "type": "String",
+          "description": "Coin full name."
         },
         {
-          "name": "transfer",
-          "type": "Whether transfer is supported",
-          "required": "",
-          "description": ""
+          "name": "depositAllEnable",
+          "type": "Boolean",
+          "description": "Whether deposits are enabled."
         },
         {
-          "name": "chains",
-          "type": "Blockchain information",
-          "required": "",
-          "description": ""
+          "name": "withdrawAllEnable",
+          "type": "Boolean",
+          "description": "Whether withdrawals are enabled."
         },
         {
-          "name": "> chain",
-          "type": "Name of the blockchain",
-          "required": "",
-          "description": ""
+          "name": "trading",
+          "type": "Boolean",
+          "description": "Whether the coin is tradable."
         },
         {
-          "name": "> needTag",
-          "type": "Whether a tag is required",
-          "required": "",
-          "description": ""
+          "name": "brokered",
+          "type": "Boolean",
+          "description": "Whether the coin is available to brokers."
         },
         {
-          "name": "> withdrawAble",
-          "type": "Whether withdrawals are enabled",
-          "required": "",
-          "description": ""
+          "name": "networkList",
+          "type": "Array<Object>",
+          "description": "Supported network information."
         },
         {
-          "name": "> rechargeAble",
-          "type": "Whether deposits are enabled",
-          "required": "",
-          "description": ""
+          "name": "-> network",
+          "type": "String",
+          "description": "Network name (e.g. ERC20 )."
         },
         {
-          "name": "> withdrawFee",
-          "type": "Withdrawal transaction fee",
-          "required": "",
-          "description": ""
+          "name": "-> isDefault",
+          "type": "Boolean",
+          "description": "Whether this is the default network."
         },
         {
-          "name": "> depositConfirm",
-          "type": "Number of block confirmations required for deposits",
-          "required": "",
-          "description": ""
+          "name": "-> depositEnable",
+          "type": "Boolean",
+          "description": "Whether deposits via this network are enabled."
         },
         {
-          "name": "> withdrawConfirm",
-          "type": "Number of block confirmations required for withdrawals",
-          "required": "",
-          "description": ""
+          "name": "-> withdrawEnable",
+          "type": "Boolean",
+          "description": "Whether withdrawals via this network are enabled."
         },
         {
-          "name": "> minDepositAmount",
-          "type": "Minimum deposit amount",
-          "required": "",
-          "description": ""
+          "name": "-> withdrawFee",
+          "type": "String",
+          "description": "Withdrawal fee."
         },
         {
-          "name": "> minWithdrawAmount",
-          "type": "Minimum withdrawal amount",
-          "required": "",
-          "description": ""
+          "name": "-> withdrawMin",
+          "type": "String",
+          "description": "Minimum withdrawal amount."
         },
         {
-          "name": "> browserUrl",
-          "type": "Blockchain explorer URL for the network",
-          "required": "",
-          "description": ""
+          "name": "-> withdrawIntegerMultiple",
+          "type": "String",
+          "description": "Required multiple for withdrawals."
+        },
+        {
+          "name": "-> minConfirm",
+          "type": "Integer",
+          "description": "Minimum confirmations required for deposits."
+        },
+        {
+          "name": "-> withdrawTag",
+          "type": "Boolean",
+          "description": "Whether a tag/memo is required."
+        },
+        {
+          "name": "-> depositDust",
+          "type": "String",
+          "description": "Minimum deposit amount that will be credited."
+        },
+        {
+          "name": "-> contractAddress",
+          "type": "String",
+          "description": "Contract address (if applicable)."
+        },
+        {
+          "name": "-> contractAddressUrl",
+          "type": "String",
+          "description": "Explorer URL for the contract."
+        },
+        {
+          "name": "-> depositDesc / withdrawDesc",
+          "type": "String",
+          "description": "Optional status messages when deposits/withdrawals are disabled."
         }
       ],
-      "response_params": []
+      "weight_ip": 5
     },
     {
-      "key": "spot.config.getallproductinfo",
-      "title": "API Default Symbol",
+      "key": "spot.config.get_product_info",
+      "title": "Exchange information",
       "category": "config",
       "method": "GET",
-      "path": "/api/v2/public/products",
-      "doc_url": "https://www.weex.com/api-doc/spot/ConfigAPI/GetAllProductInfo",
-      "requires_auth": false,
-      "request_params": [
-        {
-          "name": "data",
-          "type": "array",
-          "required": "Trading pairs supported for API trading",
-          "description": ""
-        }
-      ],
-      "response_params": []
-    },
-    {
-      "key": "spot.config.getproductinfo",
-      "title": "Get Symbol Info",
-      "category": "config",
-      "method": "GET",
-      "path": "/api/v2/public/exchangeInfo",
+      "path": "/api/v3/exchangeInfo",
       "doc_url": "https://www.weex.com/api-doc/spot/ConfigAPI/GetProductInfo",
       "requires_auth": false,
       "request_params": [
@@ -446,261 +499,333 @@
           "name": "symbol",
           "type": "String",
           "required": "No",
-          "description": "Trading pair name, e.g. BTCUSDT_SPBL"
+          "description": "Single trading pair. Mutually exclusive with symbols ."
         },
         {
           "name": "symbols",
+          "type": "Array",
+          "required": "No",
+          "description": "Multiple trading pairs. Accepts comma-separated values or a JSON array."
+        },
+        {
+          "name": "symbolStatus",
           "type": "String",
           "required": "No",
-          "description": "Multiple trading pair names,e.g. BTCUSDT_SPBL,ETHUSDC_SPBL"
+          "description": "Filter by symbol status. Currently only TRADING is supported."
         }
       ],
       "response_params": [
         {
-          "name": "symbol",
+          "name": "timezone",
           "type": "String",
-          "description": "Trading pair"
+          "description": "Exchange timezone (e.g. UTC )."
         },
         {
-          "name": "baseCoin",
-          "type": "String",
-          "description": "Base currency"
+          "name": "serverTime",
+          "type": "Long",
+          "description": "Current server time in milliseconds."
         },
         {
-          "name": "quoteCoin",
-          "type": "String",
-          "description": "Quote currency"
+          "name": "symbols",
+          "type": "Array<Object>",
+          "description": "Trading pair definitions."
         },
         {
-          "name": "tickSize",
+          "name": "-> symbol",
           "type": "String",
-          "description": "Minimum price increment (for quoteCoin)"
+          "description": "Trading pair code, e.g. BTCUSDT ."
         },
         {
-          "name": "stepSize",
+          "name": "-> status",
           "type": "String",
-          "description": "Minimum quantity increment (for baseCoin)"
+          "description": "Trading status, e.g. TRADING ."
         },
         {
-          "name": "minTradeAmount",
+          "name": "-> baseAsset",
           "type": "String",
-          "description": "Minimum trade amount"
+          "description": "Base asset symbol."
         },
         {
-          "name": "maxTradeAmount",
-          "type": "String",
-          "description": "Maximum trade amount"
+          "name": "-> baseAssetPrecision",
+          "type": "Integer",
+          "description": "Base asset precision."
         },
         {
-          "name": "takerFeeRate",
+          "name": "-> quoteAsset",
           "type": "String",
-          "description": "Taker fee rate"
+          "description": "Quote asset symbol."
         },
         {
-          "name": "makerFeeRate",
-          "type": "String",
-          "description": "Maker fee rate"
+          "name": "-> quoteAssetPrecision",
+          "type": "Integer",
+          "description": "Quote asset precision."
         },
         {
-          "name": "buyLimitPriceRatio",
+          "name": "-> minTradeAmount",
           "type": "String",
-          "description": "Buy limit price ratio"
+          "description": "Minimum order quantity."
         },
         {
-          "name": "sellLimitPriceRatio",
+          "name": "-> maxTradeAmount",
           "type": "String",
-          "description": "Sell limit price ratio"
+          "description": "Maximum order quantity."
         },
         {
-          "name": "marketBuyLimitSize",
+          "name": "-> takerFeeRate",
           "type": "String",
-          "description": "Market order buy size limit"
+          "description": "Taker fee rate."
         },
         {
-          "name": "marketSellLimitSize",
+          "name": "-> makerFeeRate",
           "type": "String",
-          "description": "Market order sell size limit"
+          "description": "Maker fee rate."
         },
         {
-          "name": "marketFallbackPriceRatio",
+          "name": "-> buyLimitPriceRatio",
           "type": "String",
-          "description": "Market order fallback price ratio"
+          "description": "Maximum allowed deviation for buy limit orders."
         },
         {
-          "name": "enableTrade",
+          "name": "-> sellLimitPriceRatio",
+          "type": "String",
+          "description": "Maximum allowed deviation for sell limit orders."
+        },
+        {
+          "name": "-> marketBuyLimitSize",
+          "type": "String",
+          "description": "Per-order size limit for market buys."
+        },
+        {
+          "name": "-> marketSellLimitSize",
+          "type": "String",
+          "description": "Per-order size limit for market sells."
+        },
+        {
+          "name": "-> marketFallbackPriceRatio",
+          "type": "String",
+          "description": "Fallback price ratio for market orders."
+        },
+        {
+          "name": "-> enableTrade",
           "type": "Boolean",
-          "description": "Whether trading is enabled"
+          "description": "Whether trading is enabled."
         },
         {
-          "name": "enableDisplay",
+          "name": "-> enableDisplay",
           "type": "Boolean",
-          "description": "Whether display is enabled"
+          "description": "Whether the symbol is displayed."
         },
         {
-          "name": "displayDigitMerge",
+          "name": "-> displayDigitMerge",
           "type": "String",
-          "description": "Depth aggregation (e.g.: \"1,0.1,0.001\")"
+          "description": "Depth merge configuration."
         },
         {
-          "name": "displayNew",
+          "name": "-> displayNew",
           "type": "Boolean",
-          "description": "Whether newly listed pair"
+          "description": "Whether the symbol is marked as ânewâ."
         },
         {
-          "name": "displayHot",
+          "name": "-> displayHot",
           "type": "Boolean",
-          "description": "Whether hot trading pair"
-        },
-        {
-          "name": "supportTracing",
-          "type": "Boolean",
-          "description": "Whether copy trading is supported"
-        },
-        {
-          "name": "supportPlanMarket",
-          "type": "Boolean",
-          "description": "Whether market orders are supported in conditional orders"
+          "description": "Whether the symbol is marked as âhotâ."
         }
-      ]
+      ],
+      "weight_ip": 20
     },
     {
-      "key": "spot.config.getservertime",
+      "key": "spot.config.get_server_time",
       "title": "Get Server Time",
       "category": "config",
       "method": "GET",
-      "path": "/api/v2/public/time",
+      "path": "/api/v3/time",
       "doc_url": "https://www.weex.com/api-doc/spot/ConfigAPI/GetServerTime",
       "requires_auth": false,
-      "request_params": [
+      "request_params": [],
+      "response_params": [
         {
-          "name": "data",
+          "name": "serverTime",
           "type": "Long",
-          "required": "Server time",
-          "description": ""
+          "description": "Current server time in milliseconds."
         }
       ],
-      "response_params": []
+      "weight_ip": 1
     },
     {
-      "key": "spot.market.getalltickerinfo",
-      "title": "Get All Ticker",
+      "key": "spot.config.ping",
+      "title": "Test Connectivity",
+      "category": "config",
+      "method": "GET",
+      "path": "/api/v3/ping",
+      "doc_url": "https://www.weex.com/api-doc/spot/ConfigAPI/Ping",
+      "requires_auth": false,
+      "request_params": [],
+      "response_params": [],
+      "weight_ip": 1
+    },
+    {
+      "key": "spot.market.get_all_ticker_info",
+      "title": "Get 24h Ticker Statistics",
       "category": "market",
       "method": "GET",
-      "path": "/api/v2/market/tickers",
+      "path": "/api/v3/market/ticker/24hr",
       "doc_url": "https://www.weex.com/api-doc/spot/MarketDataAPI/GetAllTickerInfo",
       "requires_auth": false,
       "request_params": [
         {
           "name": "symbol",
           "type": "String",
-          "required": "Trading pair name",
-          "description": ""
+          "required": "No",
+          "description": "Single trading pair (mutually exclusive with symbols )."
+        },
+        {
+          "name": "symbols",
+          "type": "Array",
+          "required": "No",
+          "description": "Multiple trading pairs. Accepts comma-separated values or a JSON array."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair."
         },
         {
           "name": "priceChange",
           "type": "String",
-          "required": "Price change amount",
-          "description": ""
+          "description": "Absolute price change over the last 24 hours."
         },
         {
           "name": "priceChangePercent",
           "type": "String",
-          "required": "Price change percentage",
-          "description": ""
-        },
-        {
-          "name": "trades",
-          "type": "long",
-          "required": "24-hour trade count",
-          "description": ""
-        },
-        {
-          "name": "size",
-          "type": "String",
-          "required": "24-hour trading volume (quantity)",
-          "description": ""
-        },
-        {
-          "name": "value",
-          "type": "String",
-          "required": "24-hour trading value (amount)",
-          "description": ""
-        },
-        {
-          "name": "high",
-          "type": "String",
-          "required": "24-hour highest price",
-          "description": ""
-        },
-        {
-          "name": "low",
-          "type": "String",
-          "required": "24-hour lowest price",
-          "description": ""
-        },
-        {
-          "name": "open",
-          "type": "String",
-          "required": "Opening price (24-hour period)",
-          "description": ""
-        },
-        {
-          "name": "close",
-          "type": "String",
-          "required": "Closing price (24-hour period)",
-          "description": ""
-        },
-        {
-          "name": "highTime",
-          "type": "long",
-          "required": "Timestamp of 24-hour high",
-          "description": ""
-        },
-        {
-          "name": "lowTime",
-          "type": "long",
-          "required": "Timestamp of 24-hour low",
-          "description": ""
-        },
-        {
-          "name": "startTime",
-          "type": "long",
-          "required": "Start timestamp of 24-hour period",
-          "description": ""
-        },
-        {
-          "name": "endTime",
-          "type": "long",
-          "required": "End timestamp of 24-hour period",
-          "description": ""
+          "description": "Percentage price change over the last 24 hours."
         },
         {
           "name": "lastPrice",
           "type": "String",
-          "required": "Last traded price",
-          "description": ""
+          "description": "Last traded price."
         },
         {
-          "name": "openInterest",
+          "name": "bidPrice",
           "type": "String",
-          "required": "Open interest (for derivatives)",
-          "description": ""
+          "description": "Best bid price."
         },
         {
-          "name": "ts",
-          "type": "long",
-          "required": "System timestamp",
-          "description": ""
+          "name": "bidQty",
+          "type": "String",
+          "description": "Best bid quantity."
+        },
+        {
+          "name": "askPrice",
+          "type": "String",
+          "description": "Best ask price."
+        },
+        {
+          "name": "askQty",
+          "type": "String",
+          "description": "Best ask quantity."
+        },
+        {
+          "name": "openPrice",
+          "type": "String",
+          "description": "Opening price 24 hours ago."
+        },
+        {
+          "name": "highPrice",
+          "type": "String",
+          "description": "Highest price in the last 24 hours."
+        },
+        {
+          "name": "lowPrice",
+          "type": "String",
+          "description": "Lowest price in the last 24 hours."
+        },
+        {
+          "name": "volume",
+          "type": "String",
+          "description": "Base asset volume in the last 24 hours."
+        },
+        {
+          "name": "quoteVolume",
+          "type": "String",
+          "description": "Quote asset volume in the last 24 hours."
+        },
+        {
+          "name": "openTime",
+          "type": "Long",
+          "description": "First trade timestamp in the 24h window (ms)."
+        },
+        {
+          "name": "closeTime",
+          "type": "Long",
+          "description": "Last trade timestamp in the 24h window (ms)."
+        },
+        {
+          "name": "count",
+          "type": "Long",
+          "description": "Number of trades in the 24h window."
         }
       ],
-      "response_params": []
+      "weight_ip": 2
     },
     {
-      "key": "spot.market.getdepthdata",
-      "title": "Get OrderBook Depth",
+      "key": "spot.market.get_book_ticker",
+      "title": "Get Best Bid/Ask",
       "category": "market",
       "method": "GET",
-      "path": "/api/v2/market/depth",
+      "path": "/api/v3/market/ticker/bookTicker",
+      "doc_url": "https://www.weex.com/api-doc/spot/MarketDataAPI/GetBookTicker",
+      "requires_auth": false,
+      "request_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "required": "No",
+          "description": "Single trading pair (mutually exclusive with symbols )."
+        },
+        {
+          "name": "symbols",
+          "type": "Array",
+          "required": "No",
+          "description": "Multiple trading pairs. Accepts comma-separated values or a JSON array."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair."
+        },
+        {
+          "name": "bidPrice",
+          "type": "String",
+          "description": "Best bid price."
+        },
+        {
+          "name": "bidQty",
+          "type": "String",
+          "description": "Best bid quantity."
+        },
+        {
+          "name": "askPrice",
+          "type": "String",
+          "description": "Best ask price."
+        },
+        {
+          "name": "askQty",
+          "type": "String",
+          "description": "Best ask quantity."
+        }
+      ],
+      "weight_ip": 4
+    },
+    {
+      "key": "spot.market.get_depth_data",
+      "title": "Get Order Book Depth",
+      "category": "market",
+      "method": "GET",
+      "path": "/api/v3/market/depth",
       "doc_url": "https://www.weex.com/api-doc/spot/MarketDataAPI/GetDepthData",
       "requires_auth": false,
       "request_params": [
@@ -708,40 +833,40 @@
           "name": "symbol",
           "type": "String",
           "required": "Yes",
-          "description": "Futures name"
-        },
-        {
-          "name": "type",
-          "type": "String",
-          "required": "No",
-          "description": "Default: step0: no aggregation.Values: step0, step1, step2, step3, step4, step5"
+          "description": "Trading pair, e.g. BTCUSDT ."
         },
         {
           "name": "limit",
-          "type": "String",
+          "type": "Integer",
           "required": "No",
-          "description": "Number of entries (Only 15 and 200)"
+          "description": "Number of depth entries. Supported values: 15 , 200 . Default 15 ."
         }
       ],
       "response_params": [
         {
-          "name": "asks",
-          "type": "array",
-          "description": "Ask [Price, Quantity]"
+          "name": "lastUpdateId",
+          "type": "Long",
+          "description": "Order book snapshot ID."
         },
         {
           "name": "bids",
-          "type": "array",
-          "description": "Bid [Price, Quantity]"
+          "type": "Array<Array>",
+          "description": "Bid depth entries formatted as [price, quantity] ."
+        },
+        {
+          "name": "asks",
+          "type": "Array<Array>",
+          "description": "Ask depth entries formatted as [price, quantity] ."
         }
-      ]
+      ],
+      "weight_ip": 5
     },
     {
-      "key": "spot.market.getklinedata",
-      "title": "Get Candlestick Data",
+      "key": "spot.market.get_k_line_data",
+      "title": "Get Kline Data",
       "category": "market",
       "method": "GET",
-      "path": "/api/v2/market/candles",
+      "path": "/api/v3/market/klines",
       "doc_url": "https://www.weex.com/api-doc/spot/MarketDataAPI/GetKLineData",
       "requires_auth": false,
       "request_params": [
@@ -749,169 +874,94 @@
           "name": "symbol",
           "type": "String",
           "required": "Yes",
-          "description": "Futures name"
+          "description": "Trading pair, e.g. BTCUSDT ."
         },
         {
-          "name": "period",
+          "name": "interval",
           "type": "String",
           "required": "Yes",
-          "description": "Candlestick interval, valid values include: [1m,5m,15m,30m,1h,2h,4h,6h,8h,12h,1d,1w,1M]"
-        },
-        {
-          "name": "limit",
-          "type": "String",
-          "required": "No",
-          "description": "Number of results"
+          "description": "Candlestick interval (e.g. [1m,5m,15m,30m,1h,2h,4h,6h,8h,12h,1d,1w,1M])."
         }
       ],
       "response_params": [
         {
-          "name": "0",
-          "type": "long",
-          "description": "System timestamp (ms)"
+          "description": "Open time (ms)."
         },
         {
-          "name": "1",
-          "type": "String",
-          "description": "Opening price"
+          "description": "Open price."
         },
         {
-          "name": "2",
-          "type": "String",
-          "description": "Highest price"
+          "description": "High price."
         },
         {
-          "name": "3",
-          "type": "String",
-          "description": "Lowest price"
+          "description": "Low price."
         },
         {
-          "name": "4",
-          "type": "String",
-          "description": "Closing price"
+          "description": "Close price."
         },
         {
-          "name": "5",
-          "type": "String",
-          "description": "Trading volume"
+          "description": "Volume (base asset)."
         },
         {
-          "name": "6",
-          "type": "String",
-          "description": "Trading turnover"
+          "description": "Close time (ms)."
+        },
+        {
+          "description": "Quote asset volume."
+        },
+        {
+          "description": "Number of trades."
+        },
+        {
+          "description": "Taker buy volume (base asset)."
+        },
+        {
+          "description": "Taker buy volume (quote asset)."
         }
-      ]
+      ],
+      "weight_ip": 2
     },
     {
-      "key": "spot.market.gettickerinfo",
-      "title": "Get Single Ticker",
+      "key": "spot.market.get_ticker_info",
+      "title": "Get Latest Price",
       "category": "market",
       "method": "GET",
-      "path": "/api/v2/market/ticker",
+      "path": "/api/v3/market/ticker/price",
       "doc_url": "https://www.weex.com/api-doc/spot/MarketDataAPI/GetTickerInfo",
       "requires_auth": false,
       "request_params": [
         {
           "name": "symbol",
           "type": "String",
-          "required": "Yes",
-          "description": "Trading pair name"
+          "required": "No",
+          "description": "Single trading pair (mutually exclusive with symbols )."
+        },
+        {
+          "name": "symbols",
+          "type": "Array",
+          "required": "No",
+          "description": "Multiple trading pairs. Accepts comma-separated values or a JSON array."
         }
       ],
       "response_params": [
         {
           "name": "symbol",
           "type": "String",
-          "description": "Trading pair name"
+          "description": "Trading pair."
         },
         {
-          "name": "priceChange",
+          "name": "price",
           "type": "String",
-          "description": "Price change amount"
-        },
-        {
-          "name": "priceChangePercent",
-          "type": "String",
-          "description": "Price change percentage"
-        },
-        {
-          "name": "trades",
-          "type": "long",
-          "description": "24-hour trade count"
-        },
-        {
-          "name": "size",
-          "type": "String",
-          "description": "24-hour trading volume (quantity)"
-        },
-        {
-          "name": "value",
-          "type": "String",
-          "description": "24-hour trading value (amount)"
-        },
-        {
-          "name": "high",
-          "type": "String",
-          "description": "24-hour highest price"
-        },
-        {
-          "name": "low",
-          "type": "String",
-          "description": "24-hour lowest price"
-        },
-        {
-          "name": "open",
-          "type": "String",
-          "description": "Opening price (24-hour period)"
-        },
-        {
-          "name": "close",
-          "type": "String",
-          "description": "Closing price (24-hour period)"
-        },
-        {
-          "name": "highTime",
-          "type": "long",
-          "description": "Timestamp of 24-hour high"
-        },
-        {
-          "name": "lowTime",
-          "type": "long",
-          "description": "Timestamp of 24-hour low"
-        },
-        {
-          "name": "startTime",
-          "type": "long",
-          "description": "Start timestamp of 24-hour period"
-        },
-        {
-          "name": "endTime",
-          "type": "long",
-          "description": "End timestamp of 24-hour period"
-        },
-        {
-          "name": "lastPrice",
-          "type": "String",
-          "description": "Last traded price"
-        },
-        {
-          "name": "openInterest",
-          "type": "String",
-          "description": "Open interest (for derivatives)"
-        },
-        {
-          "name": "ts",
-          "type": "long",
-          "description": "System timestamp"
+          "description": "Latest traded price."
         }
-      ]
+      ],
+      "weight_ip": 4
     },
     {
-      "key": "spot.market.gettradedata",
-      "title": "Get Trades",
+      "key": "spot.market.get_trade_data",
+      "title": "Get Recent Trades",
       "category": "market",
       "method": "GET",
-      "path": "/api/v2/market/fills",
+      "path": "/api/v3/market/trades",
       "doc_url": "https://www.weex.com/api-doc/spot/MarketDataAPI/GetTradeData",
       "requires_auth": false,
       "request_params": [
@@ -919,120 +969,107 @@
           "name": "symbol",
           "type": "String",
           "required": "Yes",
-          "description": "Trading pair ID"
+          "description": "Trading pair, e.g. BTCUSDT ."
         },
         {
           "name": "limit",
-          "type": "String",
+          "type": "Integer",
           "required": "No",
-          "description": "Default: 100, max: 1,000"
+          "description": "Number of trades to return. Range 1 â 1000 , default 100 ."
         }
       ],
       "response_params": [
         {
-          "name": "symbol",
+          "name": "id",
           "type": "String",
-          "description": "Trading pair symbol"
+          "description": "Trade identifier."
         },
         {
-          "name": "tradeId",
+          "name": "price",
           "type": "String",
-          "description": "Trade order ID"
+          "description": "Trade price."
         },
         {
-          "name": "fillTime",
-          "type": "long",
-          "description": "Trade execution timestamp"
-        },
-        {
-          "name": "fillPrice",
+          "name": "qty",
           "type": "String",
-          "description": "Execution price"
+          "description": "Executed quantity (base asset)."
         },
         {
-          "name": "fillQuantity",
+          "name": "quoteQty",
           "type": "String",
-          "description": "Executed quantity"
+          "description": "Executed amount (quote asset)."
         },
         {
-          "name": "tradeValue",
-          "type": "String",
-          "description": "Total trade value (price × quantity)"
+          "name": "time",
+          "type": "Long",
+          "description": "Trade time (milliseconds)."
         },
         {
-          "name": "bestMatch",
-          "type": "boolean",
-          "description": "Whether fully matched"
+          "name": "isBuyerMaker",
+          "type": "Boolean",
+          "description": "true if the buyer was the maker side."
         },
         {
-          "name": "buyerMaker",
-          "type": "boolean",
-          "description": "Whether buyer was the maker"
+          "name": "isBestMatch",
+          "type": "Boolean",
+          "description": "true if the trade matched the best price level."
         }
-      ]
+      ],
+      "weight_ip": 25
     },
     {
-      "key": "spot.order.bulkcancel",
-      "title": "Batch Cancel Orders",
+      "key": "spot.order.bulk_cancel",
+      "title": "Batch Cancel Orders (TRADE)",
       "category": "order",
-      "method": "POST",
-      "path": "/api/v2/trade/cancel-batch-orders",
+      "method": "DELETE",
+      "path": "/api/v3/order/batch",
       "doc_url": "https://www.weex.com/api-doc/spot/orderApi/BulkCancel",
       "requires_auth": true,
       "request_params": [
         {
-          "name": "symbol",
-          "type": "String",
-          "required": "Yes",
-          "description": "Trading pair. For details, view: /products"
-        },
-        {
           "name": "orderIds",
-          "type": "String[]",
-          "required": "No",
-          "description": "Either Order ID or clientOids is required."
+          "type": "Array",
+          "required": "Conditional",
+          "description": "Order IDs to cancel. Required when origClientOrderIds is empty."
         },
         {
-          "name": "clientOids",
-          "type": "String[]",
-          "required": "No",
-          "description": "Either Client customized ID or orderIds is required."
+          "name": "origClientOrderIds",
+          "type": "Array",
+          "required": "Conditional",
+          "description": "Client order IDs to cancel. Required when orderIds is empty."
         }
       ],
       "response_params": [
         {
-          "name": "successList",
-          "type": "Array",
-          "description": "Successful orders array"
+          "name": "orderList",
+          "type": "Array<Object>",
+          "description": "Per-order cancel result."
         },
         {
-          "name": "failureList",
-          "type": "Array",
-          "description": "Failed orders array"
+          "name": "-> orderId",
+          "type": "Long",
+          "description": "Cancelled order ID (if found)."
         },
         {
-          "name": "> orderId",
+          "name": "-> status",
           "type": "String",
-          "description": "Order ID"
+          "description": "Final status, e.g. CANCELED ."
         },
         {
-          "name": "> clientOid",
+          "name": "-> errorMsg",
           "type": "String",
-          "description": "Either Client customized ID"
-        },
-        {
-          "name": "> errMsg",
-          "type": "String",
-          "description": "Error message"
+          "description": "Error message when cancellation failed."
         }
-      ]
+      ],
+      "weight_ip": 5,
+      "weight_uid": 10
     },
     {
-      "key": "spot.order.bulkorder",
-      "title": "Batch Place Orders",
+      "key": "spot.order.bulk_order",
+      "title": "Batch Place Orders (TRADE)",
       "category": "order",
       "method": "POST",
-      "path": "/api/v2/trade/batch-orders",
+      "path": "/api/v3/order/batch",
       "doc_url": "https://www.weex.com/api-doc/spot/orderApi/BulkOrder",
       "requires_auth": true,
       "request_params": [
@@ -1040,54 +1077,98 @@
           "name": "symbol",
           "type": "String",
           "required": "Yes",
-          "description": "Trading pairs. For details, view: /products"
+          "description": "Trading pair, e.g. BTCUSDT ."
         },
         {
           "name": "orderList",
-          "type": "List",
+          "type": "Array<Object>",
           "required": "Yes",
-          "description": "Order list"
+          "description": "Up to 10 order definitions."
         }
       ],
       "response_params": [
         {
-          "name": "side",
-          "type": "String",
-          "description": "Yes"
+          "name": "orderList",
+          "type": "Array<Object>",
+          "description": "Per-order result list."
         },
         {
-          "name": "orderType",
+          "name": "-> symbol",
           "type": "String",
-          "description": "Yes"
+          "description": "Trading pair."
         },
         {
-          "name": "force",
-          "type": "String",
-          "description": "Yes"
+          "name": "-> orderId",
+          "type": "Long",
+          "description": "Created order ID (present when successful)."
         },
         {
-          "name": "price",
+          "name": "-> clientOrderId",
           "type": "String",
-          "description": "No"
+          "description": "Client-defined order ID."
         },
         {
-          "name": "quantity",
-          "type": "String",
-          "description": "Yes"
+          "name": "-> transactTime",
+          "type": "Long",
+          "description": "Order acceptance time (ms)."
         },
         {
-          "name": "clientOrderId",
+          "name": "-> errorCode",
           "type": "String",
-          "description": "Yes"
+          "description": "Error code when the order failed."
+        },
+        {
+          "name": "-> errorMsg",
+          "type": "String",
+          "description": "Error message when the order failed."
         }
-      ]
+      ],
+      "weight_ip": 10,
+      "weight_uid": 50
+    },
+    {
+      "key": "spot.order.cancel_order",
+      "title": "Cancel Order (TRADE)",
+      "category": "order",
+      "method": "DELETE",
+      "path": "/api/v3/order",
+      "doc_url": "https://www.weex.com/api-doc/spot/orderApi/CancelOrder",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "orderId",
+          "type": "Long",
+          "required": "Conditional",
+          "description": "Order ID to cancel. Required when origClientOrderId is not supplied."
+        },
+        {
+          "name": "origClientOrderId",
+          "type": "String",
+          "required": "Conditional",
+          "description": "Client order ID to cancel. Required when orderId is not supplied."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "orderId",
+          "type": "Long",
+          "description": "Cancelled order ID."
+        },
+        {
+          "name": "status",
+          "type": "String",
+          "description": "Final status (e.g. CANCELED )."
+        }
+      ],
+      "weight_ip": 1,
+      "weight_uid": 1
     },
     {
       "key": "spot.order.cancel_symbol_orders",
-      "title": "Cancel Order by Symbol",
+      "title": "Cancel All Orders by Symbol (TRADE)",
       "category": "order",
-      "method": "POST",
-      "path": "/api/v2/trade/cancel-symbol-order",
+      "method": "DELETE",
+      "path": "/api/v3/openOrders",
       "doc_url": "https://www.weex.com/api-doc/spot/orderApi/Cancel-Symbol-Orders",
       "requires_auth": true,
       "request_params": [
@@ -1095,99 +1176,30 @@
           "name": "symbol",
           "type": "String",
           "required": "Yes",
-          "description": "Trading pair. For details, view: /products"
+          "description": "Trading pair whose open orders should be cancelled."
         }
       ],
       "response_params": [
-        {
-          "name": "successList",
-          "type": "Array",
-          "description": "Successful orders array"
-        },
-        {
-          "name": "failureList",
-          "type": "Array",
-          "description": "Failed orders array"
-        },
-        {
-          "name": "> orderId",
-          "type": "String",
-          "description": "Order ID"
-        },
-        {
-          "name": "> errMsg",
-          "type": "String",
-          "description": "Error message"
-        }
-      ]
-    },
-    {
-      "key": "spot.order.cancelorder",
-      "title": "Cancel Order",
-      "category": "order",
-      "method": "POST",
-      "path": "/api/v2/trade/cancel-order",
-      "doc_url": "https://www.weex.com/api-doc/spot/orderApi/CancelOrder",
-      "requires_auth": true,
-      "request_params": [
-        {
-          "name": "symbol",
-          "type": "String",
-          "required": "Yes",
-          "description": "Trading pair. For details, view: /products"
-        },
         {
           "name": "orderId",
-          "type": "String",
-          "required": "No",
-          "description": "Either Order ID or clientOid is required."
+          "type": "Long",
+          "description": "Cancelled order ID."
         },
         {
-          "name": "clientOid",
+          "name": "status",
           "type": "String",
-          "required": "No",
-          "description": "Either Client customized ID or orderId is required."
+          "description": "Final order status."
         }
       ],
-      "response_params": [
-        {
-          "name": "order_id",
-          "type": "String",
-          "description": "Order ID"
-        },
-        {
-          "name": "client_oid",
-          "type": "String",
-          "description": "Client order ID"
-        },
-        {
-          "name": "symbol",
-          "type": "String",
-          "description": "Trading pair"
-        },
-        {
-          "name": "result",
-          "type": "Boolean",
-          "description": "Cancellation result"
-        },
-        {
-          "name": "err_code",
-          "type": "String",
-          "description": "Error code"
-        },
-        {
-          "name": "err_msg",
-          "type": "String",
-          "description": "Error message"
-        }
-      ]
+      "weight_ip": 1,
+      "weight_uid": 1
     },
     {
-      "key": "spot.order.historyorders",
-      "title": "Get History Orders",
+      "key": "spot.order.history_orders",
+      "title": "Get All Orders (USER_DATA)",
       "category": "order",
-      "method": "POST",
-      "path": "/api/v2/trade/history",
+      "method": "GET",
+      "path": "/api/v3/allOrders",
       "doc_url": "https://www.weex.com/api-doc/spot/orderApi/HistoryOrders",
       "requires_auth": true,
       "request_params": [
@@ -1195,227 +1207,140 @@
           "name": "symbol",
           "type": "String",
           "required": "Yes",
-          "description": "Trading pair. For details, view: /products"
+          "description": "Trading pair to query."
         },
         {
-          "name": "after",
+          "name": "startTime",
           "type": "Long",
           "required": "No",
-          "description": "Start timestamp (in milliseconds)"
+          "description": "Start time in milliseconds."
         },
         {
-          "name": "before",
+          "name": "endTime",
           "type": "Long",
           "required": "No",
-          "description": "End timestamp (in milliseconds)"
+          "description": "End time in milliseconds. Must be greater than or equal to startTime ."
         },
         {
-          "name": "pageIndex",
+          "name": "limit",
           "type": "Integer",
           "required": "No",
-          "description": "Page number, starting from 0 (Default: 0)"
+          "description": "Number of records per page (default 100, maximum 1000)."
         },
         {
-          "name": "pageSize",
+          "name": "page",
           "type": "Integer",
           "required": "No",
-          "description": "Page size, must be greater than 0 and less than or equal to 100 (Default: 10)"
+          "description": "Page index starting from 1 (default 1)."
         }
       ],
-      "response_params": [
-        {
-          "name": "accountId",
-          "type": "String",
-          "description": "Account ID"
-        },
-        {
-          "name": "symbol",
-          "type": "String",
-          "description": "Trading pair"
-        },
-        {
-          "name": "orderId",
-          "type": "String",
-          "description": "Order ID"
-        },
-        {
-          "name": "clientOrderId",
-          "type": "String",
-          "description": "Client order ID"
-        },
-        {
-          "name": "price",
-          "type": "String",
-          "description": "Order price"
-        },
-        {
-          "name": "quantity",
-          "type": "String",
-          "description": "Order quantity"
-        },
-        {
-          "name": "orderType",
-          "type": "String",
-          "description": "Order type"
-        },
-        {
-          "name": "side",
-          "type": "String",
-          "description": "Order side"
-        },
-        {
-          "name": "status",
-          "type": "String",
-          "description": "Order status"
-        },
-        {
-          "name": "latestFillPrice",
-          "type": "String",
-          "description": "Latest execution price"
-        },
-        {
-          "name": "maxFillPrice",
-          "type": "String",
-          "description": "Highest execution price"
-        },
-        {
-          "name": "minFillPrice",
-          "type": "String",
-          "description": "Lowest execution price"
-        },
-        {
-          "name": "fillQuantity",
-          "type": "String",
-          "description": "Filled quantity"
-        },
-        {
-          "name": "fillTotalAmount",
-          "type": "String",
-          "description": "Total filled amount"
-        },
-        {
-          "name": "cTime",
-          "type": "String",
-          "description": "Creation time"
-        },
-        {
-          "name": "uTime",
-          "type": "String",
-          "description": "Update time"
-        }
-      ]
+      "response_params": [],
+      "weight_ip": 10,
+      "weight_uid": 10
     },
     {
-      "key": "spot.order.orderdetails",
-      "title": "Get Order Info",
+      "key": "spot.order.order_details",
+      "title": "Get Order Details (USER_DATA)",
       "category": "order",
-      "method": "POST",
-      "path": "/api/v2/trade/orderInfo",
+      "method": "GET",
+      "path": "/api/v3/order",
       "doc_url": "https://www.weex.com/api-doc/spot/orderApi/OrderDetails",
       "requires_auth": true,
       "request_params": [
         {
           "name": "orderId",
-          "type": "String",
-          "required": "No",
-          "description": "Either Order ID or clientOrderId is required."
+          "type": "Long",
+          "required": "Conditional",
+          "description": "Order ID. Required when origClientOrderId is not supplied."
         },
         {
-          "name": "clientOrderId",
+          "name": "origClientOrderId",
           "type": "String",
-          "required": "No",
-          "description": "Either Client customized ID or orderId is required."
+          "required": "Conditional",
+          "description": "Client order ID. Required when orderId is not supplied."
         }
       ],
       "response_params": [
         {
-          "name": "accountId",
-          "type": "String",
-          "description": "Account ID"
-        },
-        {
           "name": "symbol",
           "type": "String",
-          "description": "Trading pair"
+          "description": "Trading pair."
         },
         {
           "name": "orderId",
-          "type": "String",
-          "description": "Order ID"
+          "type": "Long",
+          "description": "Order ID."
         },
         {
           "name": "clientOrderId",
           "type": "String",
-          "description": "Client order ID"
+          "description": "Client-defined order ID."
         },
         {
           "name": "price",
           "type": "String",
-          "description": "Order price"
+          "description": "Order price."
         },
         {
-          "name": "quantity",
+          "name": "origQty",
           "type": "String",
-          "description": "Order quantity"
+          "description": "Original order quantity."
         },
         {
-          "name": "orderType",
+          "name": "executedQty",
           "type": "String",
-          "description": "Order type"
+          "description": "Filled quantity."
         },
         {
-          "name": "side",
+          "name": "cummulativeQuoteQty",
           "type": "String",
-          "description": "Order side"
+          "description": "Filled amount in quote asset."
         },
         {
           "name": "status",
           "type": "String",
-          "description": "Order status"
+          "description": "Order status (e.g. NEW , FILLED , CANCELED )."
         },
         {
-          "name": "latestFillPrice",
+          "name": "timeInForce",
           "type": "String",
-          "description": "Latest execution price"
+          "description": "Time-in-force policy."
         },
         {
-          "name": "maxFillPrice",
+          "name": "type",
           "type": "String",
-          "description": "Highest execution price"
+          "description": "Order type."
         },
         {
-          "name": "minFillPrice",
+          "name": "side",
           "type": "String",
-          "description": "Lowest execution price"
+          "description": "BUY or SELL ."
         },
         {
-          "name": "fillQuantity",
-          "type": "String",
-          "description": "Filled quantity"
+          "name": "time",
+          "type": "Long",
+          "description": "Creation time (ms)."
         },
         {
-          "name": "fillTotalAmount",
-          "type": "String",
-          "description": "Total filled amount"
+          "name": "updateTime",
+          "type": "Long",
+          "description": "Last update time (ms)."
         },
         {
-          "name": "cTime",
-          "type": "String",
-          "description": "Creation time"
-        },
-        {
-          "name": "uTime",
-          "type": "String",
-          "description": "Update time"
+          "name": "isWorking",
+          "type": "Boolean",
+          "description": "Whether the order is active."
         }
-      ]
+      ],
+      "weight_ip": 2,
+      "weight_uid": 2
     },
     {
-      "key": "spot.order.placeorder",
-      "title": "Place Order",
+      "key": "spot.order.place_order",
+      "title": "Place Order (TRADE)",
       "category": "order",
       "method": "POST",
-      "path": "/api/v2/trade/orders",
+      "path": "/api/v3/order",
       "doc_url": "https://www.weex.com/api-doc/spot/orderApi/PlaceOrder",
       "requires_auth": true,
       "request_params": [
@@ -1423,64 +1348,76 @@
           "name": "symbol",
           "type": "String",
           "required": "Yes",
-          "description": "Trading pairs. For details, view: /products )"
+          "description": "Trading pair, e.g. BTCUSDT ."
         },
         {
           "name": "side",
           "type": "String",
           "required": "Yes",
-          "description": "Order direction buy: Buy sell: Sell"
+          "description": "Order side. Supported values: BUY , SELL ."
         },
         {
-          "name": "orderType",
+          "name": "type",
           "type": "String",
           "required": "Yes",
-          "description": "Order type limit: Limit order market: Market order"
+          "description": "Order type. Supported values: LIMIT , MARKET ."
         },
         {
-          "name": "force",
+          "name": "timeInForce",
           "type": "String",
-          "required": "Yes",
-          "description": "Order execution type (It is invalid when orderType is market) normal: Normal limit order, good till cancelled postOnly: Post-only order (maker only) fok: Fill or kill ioc: Immediate or cancel"
-        },
-        {
-          "name": "price",
-          "type": "String",
-          "required": "No",
-          "description": "Limit price  (required when orderType is 'limit')"
+          "required": "Conditional",
+          "description": "Time-in-force policy. Required when type = LIMIT . Supported values: GTC , IOC , FOK ."
         },
         {
           "name": "quantity",
           "type": "String",
           "required": "Yes",
-          "description": "Order amount"
+          "description": "Order quantity."
         },
         {
-          "name": "clientOrderId",
+          "name": "price",
           "type": "String",
-          "required": "Yes",
-          "description": "Customizable order ID"
+          "required": "Conditional",
+          "description": "Limit price. Required when type = LIMIT ."
+        },
+        {
+          "name": "newClientOrderId",
+          "type": "String",
+          "required": "No",
+          "description": "Client-defined order ID (if omitted, the system assigns one). If an active order already uses the same newClientOrderId , the API returns success but does not create a duplicate order."
         }
       ],
       "response_params": [
         {
+          "name": "symbol",
+          "type": "String",
+          "description": "Trading pair."
+        },
+        {
           "name": "orderId",
           "type": "Long",
-          "description": "Order ID"
+          "description": "Order ID generated by the system."
         },
         {
           "name": "clientOrderId",
           "type": "String",
-          "description": "Customizable order ID"
+          "description": "Client-defined order ID."
+        },
+        {
+          "name": "transactTime",
+          "type": "Long",
+          "description": "Order acceptance timestamp (ms)."
         }
-      ]
+      ],
+      "weight_ip": 2,
+      "weight_uid": 5
     },
     {
-      "key": "spot.order.transactiondetails",
-      "title": "Get Fills",
+      "key": "spot.order.transaction_details",
+      "title": "Get Trade History (USER_DATA)",
       "category": "order",
-      "method": "POST",
-      "path": "/api/v2/trade/fills",
+      "method": "GET",
+      "path": "/api/v3/myTrades",
       "doc_url": "https://www.weex.com/api-doc/spot/orderApi/TransactionDetails",
       "requires_auth": true,
       "request_params": [
@@ -1488,271 +1425,288 @@
           "name": "symbol",
           "type": "String",
           "required": "Yes",
-          "description": "Trading pair. For details, view: /products"
+          "description": "Trading pair."
         },
         {
           "name": "orderId",
           "type": "Long",
           "required": "No",
-          "description": "Order ID"
+          "description": "Filter by order ID."
         },
         {
-          "name": "after",
+          "name": "startTime",
           "type": "Long",
           "required": "No",
-          "description": "Start timestamp (in milliseconds)"
+          "description": "Start time (ms)."
         },
         {
-          "name": "before",
+          "name": "endTime",
           "type": "Long",
           "required": "No",
-          "description": "End timestamp (in milliseconds)"
+          "description": "End time (ms). Must be â¥ startTime ."
         },
         {
-          "name": "pageIndex",
+          "name": "limit",
           "type": "Integer",
           "required": "No",
-          "description": "Page number, starting from 0 (Default: 0)"
-        },
-        {
-          "name": "pageSize",
-          "type": "Integer",
-          "required": "No",
-          "description": "Page size, must be greater than 0 and less than or equal to 100 (Default: 10)"
+          "description": "Page size (default 100)."
         }
       ],
       "response_params": [
         {
-          "name": "accountId",
-          "type": "String",
-          "description": "Account ID"
-        },
-        {
           "name": "symbol",
           "type": "String",
-          "description": "Trading pair"
+          "description": "Trading pair."
         },
         {
-          "name": "baseCoin",
-          "type": "String",
-          "description": "Base currency"
-        },
-        {
-          "name": "quoteCoin",
-          "type": "String",
-          "description": "Quote currency"
+          "name": "id",
+          "type": "Long",
+          "description": "Trade identifier."
         },
         {
           "name": "orderId",
-          "type": "String",
-          "description": "Order ID"
+          "type": "Long",
+          "description": "Related order ID."
         },
         {
-          "name": "fillId",
+          "name": "price",
           "type": "String",
-          "description": "Trade ID"
+          "description": "Trade price."
         },
         {
-          "name": "orderType",
+          "name": "qty",
           "type": "String",
-          "description": "Order type"
+          "description": "Filled quantity (base asset)."
         },
         {
-          "name": "side",
+          "name": "quoteQty",
           "type": "String",
-          "description": "Order side"
+          "description": "Filled amount (quote asset)."
         },
         {
-          "name": "fillPrice",
+          "name": "commission",
           "type": "String",
-          "description": "Execution price"
+          "description": "Commission amount."
         },
         {
-          "name": "fillQuantity",
-          "type": "String",
-          "description": "Executed quantity"
+          "name": "time",
+          "type": "Long",
+          "description": "Trade time (ms)."
         },
         {
-          "name": "fillTotalAmount",
-          "type": "String",
-          "description": "Total filled amount"
-        },
-        {
-          "name": "fees",
-          "type": "String",
-          "description": "Fee"
-        },
-        {
-          "name": "cTime",
-          "type": "String",
-          "description": "Creation time"
+          "name": "isBuyer",
+          "type": "Boolean",
+          "description": "Whether the user was the buyer."
         }
-      ]
+      ],
+      "weight_ip": 5,
+      "weight_uid": 5
     },
     {
-      "key": "spot.order.unfinishedorders",
-      "title": "Get Current Orders",
+      "key": "spot.order.unfinished_orders",
+      "title": "Get Current Open Orders (USER_DATA)",
       "category": "order",
-      "method": "POST",
-      "path": "/api/v2/trade/open-orders",
+      "method": "GET",
+      "path": "/api/v3/openOrders",
       "doc_url": "https://www.weex.com/api-doc/spot/orderApi/UnfinishedOrders",
       "requires_auth": true,
       "request_params": [
         {
           "name": "symbol",
           "type": "String",
-          "required": "Yes",
-          "description": "Trading pair. For details, view: /products"
-        },
-        {
-          "name": "limit",
-          "type": "Integer",
           "required": "No",
-          "description": "Number of records to retrieve. Must be greater than 0 and less than or equal to 100."
-        },
-        {
-          "name": "pageNo",
-          "type": "Integer",
-          "required": "No",
-          "description": "Page number (starting from 0, default 0)"
+          "description": "Filter by trading pair. If omitted, returns open orders for all symbols."
         }
       ],
       "response_params": [
         {
-          "name": "accountId",
-          "type": "String",
-          "description": "Account ID"
-        },
-        {
           "name": "symbol",
           "type": "String",
-          "description": "Trading pair"
+          "description": "Trading pair."
         },
         {
           "name": "orderId",
-          "type": "String",
-          "description": "Order ID"
+          "type": "Long",
+          "description": "Order ID."
         },
         {
           "name": "clientOrderId",
           "type": "String",
-          "description": "Client order ID"
+          "description": "Client-defined order ID."
         },
         {
           "name": "price",
           "type": "String",
-          "description": "Order price"
+          "description": "Order price."
         },
         {
-          "name": "quantity",
+          "name": "origQty",
           "type": "String",
-          "description": "Order quantity"
+          "description": "Original order quantity."
         },
         {
-          "name": "orderType",
+          "name": "executedQty",
           "type": "String",
-          "description": "Order type"
+          "description": "Filled quantity."
         },
         {
-          "name": "side",
+          "name": "cummulativeQuoteQty",
           "type": "String",
-          "description": "Order side"
+          "description": "Filled amount in quote asset."
         },
         {
           "name": "status",
           "type": "String",
-          "description": "Order status"
+          "description": "Order status (e.g. NEW , PARTIALLY_FILLED )."
         },
         {
-          "name": "latestFillPrice",
+          "name": "timeInForce",
           "type": "String",
-          "description": "Latest execution price"
+          "description": "Time-in-force policy."
         },
         {
-          "name": "maxFillPrice",
+          "name": "type",
           "type": "String",
-          "description": "Highest execution price"
+          "description": "Order type."
         },
         {
-          "name": "minFillPrice",
+          "name": "side",
           "type": "String",
-          "description": "Lowest execution price"
+          "description": "BUY or SELL ."
         },
         {
-          "name": "fillQuantity",
-          "type": "String",
-          "description": "Filled quantity"
+          "name": "time",
+          "type": "Long",
+          "description": "Creation time (ms)."
         },
         {
-          "name": "fillTotalAmount",
-          "type": "String",
-          "description": "Total filled amount"
+          "name": "updateTime",
+          "type": "Long",
+          "description": "Last update time (ms)."
         },
         {
-          "name": "cTime",
-          "type": "String",
-          "description": "Creation time"
-        },
-        {
-          "name": "uTime",
-          "type": "String",
-          "description": "Update time"
+          "name": "isWorking",
+          "type": "Boolean",
+          "description": "Whether the order is currently working."
         }
-      ]
+      ],
+      "weight_ip": 3,
+      "weight_uid": 3
     },
     {
-      "key": "spot.rebate.getaffiliatecommission",
+      "key": "spot.rebate.get_affiliate_assets",
+      "title": "Get Affiliate Member Assets",
+      "category": "rebate",
+      "method": "GET",
+      "path": "/api/v3/agency/getAssert",
+      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetAffiliateAssets",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "userId",
+          "type": "Long",
+          "required": "Yes",
+          "description": "Direct customer UID"
+        },
+        {
+          "name": "startTime",
+          "type": "String",
+          "required": "No",
+          "description": "Optional start time (UTC, format yyyy-MM-dd )"
+        },
+        {
+          "name": "endTime",
+          "type": "String",
+          "required": "No",
+          "description": "Optional end time (UTC, format yyyy-MM-dd , defaults to current if absent)"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "availableBalance",
+          "type": "String",
+          "description": "Available balance in USDT"
+        },
+        {
+          "name": "fundingTotalUsdt",
+          "type": "String",
+          "description": "Total funding account equity in USDT"
+        },
+        {
+          "name": "spotProTotalUsdt",
+          "type": "String",
+          "description": "Total spot account equity in USDT"
+        },
+        {
+          "name": "unimarginTotalUsdt",
+          "type": "String",
+          "description": "Total contract account equity in USDT"
+        },
+        {
+          "name": "depositTotalAmount",
+          "type": "String",
+          "description": "Cumulative deposit amount within the time window"
+        },
+        {
+          "name": "depositList",
+          "type": "Array",
+          "description": "Deposit records"
+        }
+      ],
+      "weight_ip": 20,
+      "weight_uid": 20
+    },
+    {
+      "key": "spot.rebate.get_affiliate_commission",
       "title": "Get Affiliate Commission",
       "category": "rebate",
       "method": "GET",
-      "path": "/api/v2/rebate/affiliate/getAffiliateCommission",
+      "path": "/api/v3/rebate/affiliate/getAffiliateCommission",
       "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetAffiliateCommission",
       "requires_auth": true,
       "request_params": [
         {
-          "name": "uid",
-          "type": "Long",
+          "name": "Long",
           "required": "No",
           "description": "Invited User UID"
         },
         {
-          "name": "startTime",
-          "type": "Long",
+          "name": "Long",
           "required": "No",
           "description": "Start timestamp in UTC (milliseconds). Default: 7 days ago,Max range: 3 months"
         },
         {
-          "name": "endTime",
-          "type": "Long",
+          "name": "Long",
           "required": "No",
           "description": "End timestamp in UTC (milliseconds). Default: current time,Max range: 3 months"
         },
         {
-          "name": "coin",
-          "type": "String",
+          "name": "String",
           "required": "No",
           "description": "USDT or BTC"
         },
         {
-          "name": "productType",
-          "type": "String",
+          "name": "String",
           "required": "No",
           "description": "SPOT or FUTURES (default SPOT)"
         },
         {
-          "name": "page",
-          "type": "Integer",
+          "name": "Integer",
           "required": "No",
           "description": "Page number (starting from 1, default 1)"
         },
         {
-          "name": "pageSize",
-          "type": "Integer",
+          "name": "Integer",
           "required": "No",
           "description": "Page size (default 100)"
         }
       ],
       "response_params": [
+        {
+          "name": "channelCommissionInfoItems",
+          "type": "Array",
+          "description": "Commission records"
+        },
         {
           "name": "uid",
           "type": "Long",
@@ -1807,45 +1761,125 @@
           "name": "makerAmount",
           "type": "String",
           "description": "Maker Amount (Trading Volume)"
-        }
-      ]
-    },
-    {
-      "key": "spot.rebate.getaffiliateuids",
-      "title": "Get Affiliate UIDs",
-      "category": "rebate",
-      "method": "GET",
-      "path": "/api/v2/rebate/affiliate/getAffiliateUIDs",
-      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetAffiliateUIDs",
-      "requires_auth": true,
-      "request_params": [
-        {
-          "name": "uid",
-          "type": "Long",
-          "required": "No",
-          "description": "Invited User UID"
         },
         {
-          "name": "startTime",
-          "type": "Long",
-          "required": "No",
-          "description": "Start timestamp in UTC (milliseconds)"
-        },
-        {
-          "name": "endTime",
-          "type": "Long",
-          "required": "No",
-          "description": "End timestamp in UTC (milliseconds)"
-        },
-        {
-          "name": "page",
+          "name": "pages",
           "type": "Integer",
-          "required": "No",
-          "description": "Page number (starting from 1, default 1)"
+          "description": "Total pages"
         },
         {
           "name": "pageSize",
           "type": "Integer",
+          "description": "Page size"
+        },
+        {
+          "name": "total",
+          "type": "Long",
+          "description": "Total records"
+        }
+      ],
+      "weight_ip": 20,
+      "weight_uid": 20
+    },
+    {
+      "key": "spot.rebate.get_affiliate_deal_data",
+      "title": "Get Affiliate Deal Data",
+      "category": "rebate",
+      "method": "GET",
+      "path": "/api/v3/agency/getDealData",
+      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetAffiliateDealData",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "userIds",
+          "type": "List<Long>",
+          "required": "No",
+          "description": "Optional repeated query parameter (e.g. userIds=123&userIds=456 ). Defaults to all direct users"
+        },
+        {
+          "name": "startTime",
+          "type": "String",
+          "required": "No",
+          "description": "Filter start date (UTC, format yyyy-MM-dd )"
+        },
+        {
+          "name": "endTime",
+          "type": "String",
+          "required": "No",
+          "description": "Filter end date (UTC, format yyyy-MM-dd )"
+        }
+      ],
+      "response_params": [
+        {
+          "name": "data",
+          "type": "Array",
+          "description": "Trading statistics returned by the upstream service"
+        },
+        {
+          "name": "userId",
+          "type": "Long",
+          "description": "UID of the queried customer"
+        },
+        {
+          "name": "spotDealAmountUsdt",
+          "type": "String",
+          "description": "Spot trading volume (USDT)"
+        },
+        {
+          "name": "futuresProDealAmountUsdt",
+          "type": "String",
+          "description": "Futures trading volume (USDT)"
+        },
+        {
+          "name": "spotProDealAmountUsdtTemp",
+          "type": "String",
+          "description": "Spot trading volume (raw value returned by partner system)"
+        },
+        {
+          "name": "startTime",
+          "type": "String",
+          "description": "Start date applied by the upstream service ( yyyy-MM-dd )"
+        },
+        {
+          "name": "endTime",
+          "type": "String",
+          "description": "End date applied by the upstream service ( yyyy-MM-dd )"
+        }
+      ],
+      "weight_ip": 20,
+      "weight_uid": 20
+    },
+    {
+      "key": "spot.rebate.get_affiliate_ui_ds",
+      "title": "Get Affiliate UIDs",
+      "category": "rebate",
+      "method": "GET",
+      "path": "/api/v3/rebate/affiliate/getAffiliateUIDs",
+      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetAffiliateUIDs",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "Invited User UID"
+        },
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "Start timestamp in UTC (milliseconds)"
+        },
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "End timestamp in UTC (milliseconds)"
+        },
+        {
+          "name": "Integer",
+          "required": "No",
+          "description": "Page number (starting from 1, default 1)"
+        },
+        {
+          "name": "Integer",
           "required": "No",
           "description": "Page size (default 100)"
         }
@@ -1858,7 +1892,7 @@
         },
         {
           "name": "registerTime",
-          "type": "String",
+          "type": "Long",
           "description": "Registration timestamp, unit: milliseconds"
         },
         {
@@ -1873,62 +1907,79 @@
         },
         {
           "name": "firstDeposit",
-          "type": "String",
-          "description": "First Deposit Time"
+          "type": "Long",
+          "description": "First deposit time (milliseconds)"
         },
         {
           "name": "firstTrade",
-          "type": "String",
-          "description": "First Trade Time"
+          "type": "Long",
+          "description": "First trade time (milliseconds)"
         },
         {
           "name": "lastDeposit",
-          "type": "String",
-          "description": "Last Deposit Time"
+          "type": "Long",
+          "description": "Latest deposit time (milliseconds)"
         },
         {
           "name": "lastTrade",
-          "type": "String",
-          "description": "Last Trade Time"
-        }
-      ]
-    },
-    {
-      "key": "spot.rebate.getchannelusertradeandasset",
-      "title": "Get Affiliate Referral Data",
-      "category": "rebate",
-      "method": "GET",
-      "path": "/api/v2/rebate/affiliate/getChannelUserTradeAndAsset",
-      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetChannelUserTradeAndAsset",
-      "requires_auth": true,
-      "request_params": [
-        {
-          "name": "uid",
           "type": "Long",
-          "required": "No",
-          "description": "Invited User UID"
+          "description": "Latest trade time (milliseconds)"
         },
         {
-          "name": "startTime",
-          "type": "Long",
-          "required": "No",
-          "description": "Start timestamp in UTC (milliseconds)"
+          "name": "channelUserInfoItemList",
+          "type": "Array",
+          "description": "Affiliate user items"
         },
         {
-          "name": "endTime",
-          "type": "Long",
-          "required": "No",
-          "description": "End timestamp in UTC (milliseconds)"
-        },
-        {
-          "name": "page",
+          "name": "pages",
           "type": "Integer",
-          "required": "No",
-          "description": "Page number (starting from 1, default 1)"
+          "description": "Total pages"
         },
         {
           "name": "pageSize",
           "type": "Integer",
+          "description": "Page size"
+        },
+        {
+          "name": "total",
+          "type": "Long",
+          "description": "Total records"
+        }
+      ],
+      "weight_ip": 20,
+      "weight_uid": 20
+    },
+    {
+      "key": "spot.rebate.get_channel_user_trade_and_asset",
+      "title": "Get Affiliate Referral Data",
+      "category": "rebate",
+      "method": "GET",
+      "path": "/api/v3/rebate/affiliate/getChannelUserTradeAndAsset",
+      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetChannelUserTradeAndAsset",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "Invited User UID"
+        },
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "Start timestamp in UTC (milliseconds)"
+        },
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "End timestamp in UTC (milliseconds)"
+        },
+        {
+          "name": "Integer",
+          "required": "No",
+          "description": "Page number (starting from 1, default 1)"
+        },
+        {
+          "name": "Integer",
           "required": "No",
           "description": "Page size (default 100)"
         }
@@ -1963,68 +2014,87 @@
           "name": "commission",
           "type": "String",
           "description": "Commission"
-        }
-      ]
-    },
-    {
-      "key": "spot.rebate.getinternalwithdrawalstatus",
-      "title": "Get Internal Withdrawal Status",
-      "category": "rebate",
-      "method": "GET",
-      "path": "/api/v2/rebate/affiliate/getInternalWithdrawalStatus",
-      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetInternalWithdrawalStatus",
-      "requires_auth": true,
-      "request_params": [
-        {
-          "name": "withdrawID",
-          "type": "String",
-          "required": "No",
-          "description": "Withdraw ID"
         },
         {
-          "name": "coin",
-          "type": "String",
-          "required": "No",
-          "description": "Currency type (USDT, BTC)"
+          "name": "records",
+          "type": "Array",
+          "description": "Aggregated records"
         },
         {
-          "name": "startTime",
-          "type": "Long",
-          "required": "No",
-          "description": "Start timestamp in UTC (milliseconds) (Only data from the past month can be queried)"
-        },
-        {
-          "name": "endTime",
-          "type": "Long",
-          "required": "No",
-          "description": "End timestamp in UTC (milliseconds) (Only data from the past month can be queried)"
-        },
-        {
-          "name": "fromAccountType",
-          "type": "String",
-          "required": "No",
-          "description": "Type of the originating account (SPOT: spot wallet, FUND: funding wallet, Default: SPOT)"
-        },
-        {
-          "name": "toAccountType",
-          "type": "String",
-          "required": "No",
-          "description": "Type of the target account (SPOT: spot wallet, FUND: funding wallet, Default: SPOT)"
-        },
-        {
-          "name": "page",
+          "name": "pages",
           "type": "Integer",
-          "required": "No",
-          "description": "Page number (starting from 1, default 1)"
+          "description": "Total pages"
         },
         {
           "name": "pageSize",
           "type": "Integer",
+          "description": "Page size"
+        },
+        {
+          "name": "total",
+          "type": "Long",
+          "description": "Total records"
+        }
+      ],
+      "weight_ip": 20,
+      "weight_uid": 20
+    },
+    {
+      "key": "spot.rebate.get_internal_withdrawal_status",
+      "title": "Get Internal Withdrawal Status",
+      "category": "rebate",
+      "method": "GET",
+      "path": "/api/v3/rebate/affiliate/getInternalWithdrawalStatus",
+      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/GetInternalWithdrawalStatus",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "String",
+          "required": "No",
+          "description": "Withdraw ID"
+        },
+        {
+          "name": "String",
+          "required": "No",
+          "description": "Currency type (USDT, BTC)"
+        },
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "Start timestamp in UTC (milliseconds) (Only data from the past month can be queried)"
+        },
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "End timestamp in UTC (milliseconds) (Only data from the past month can be queried)"
+        },
+        {
+          "name": "String",
+          "required": "No",
+          "description": "Type of the originating account (SPOT: spot wallet, FUND: funding wallet, Default: SPOT)"
+        },
+        {
+          "name": "String",
+          "required": "No",
+          "description": "Type of the target account (SPOT: spot wallet, FUND: funding wallet, Default: SPOT)"
+        },
+        {
+          "name": "Integer",
+          "required": "No",
+          "description": "Page number (starting from 1, default 1)"
+        },
+        {
+          "name": "Integer",
           "required": "No",
           "description": "Page size (default 100, max 200)"
         }
       ],
       "response_params": [
+        {
+          "name": "items",
+          "type": "Array",
+          "description": "Withdrawal records"
+        },
         {
           "name": "fromUserId",
           "type": "Long",
@@ -2048,7 +2118,7 @@
         {
           "name": "status",
           "type": "String",
-          "description": "Possible values: SUCCESS FAILED PROGRESSING: Processing"
+          "description": "Possible values: SUCCESS FAILED PROGRESSING"
         },
         {
           "name": "amount",
@@ -2064,104 +2134,121 @@
           "name": "updateTime",
           "type": "Long",
           "description": "Withdraw updated timestamp (ms)"
-        }
-      ]
-    },
-    {
-      "key": "spot.rebate.internalwithdrawal",
-      "title": "Internal Withdrawal",
-      "category": "rebate",
-      "method": "POST",
-      "path": "/api/v2/rebate/affiliate/internalWithdrawal",
-      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/InternalWithdrawal",
-      "requires_auth": true,
-      "request_params": [
+        },
         {
-          "name": "toUserId",
+          "name": "total",
           "type": "Long",
-          "required": "Yes",
-          "description": "Transfer-in user ID"
-        },
-        {
-          "name": "coin",
-          "type": "String",
-          "required": "Yes",
-          "description": "Currency type (USDT, BTC)"
-        },
-        {
-          "name": "amount",
-          "type": "String",
-          "required": "Yes",
-          "description": "Transfer amount (Up to 6 decimal places)"
-        },
-        {
-          "name": "fromAccountType",
-          "type": "String",
-          "required": "No",
-          "description": "Type of the originating account (SPOT: spot wallet, FUND: funding wallet, Default: SPOT)"
-        },
-        {
-          "name": "toAccountType",
-          "type": "String",
-          "required": "No",
-          "description": "Type of the target account (SPOT: spot wallet, FUND: funding wallet, Default: SPOT)"
-        }
-      ],
-      "response_params": [
-        {
-          "name": "id",
-          "type": "String",
-          "description": "Withdrawal ID"
-        }
-      ]
-    },
-    {
-      "key": "spot.rebate.querysubchanneltransactions",
-      "title": "Get Subaffiliates Data (affiliate only)",
-      "category": "rebate",
-      "method": "POST",
-      "path": "/api/v2/rebate/affiliate/querySubChannelTransactions",
-      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/QuerySubChannelTransactions",
-      "requires_auth": true,
-      "request_params": [
-        {
-          "name": "subUid",
-          "type": "Long",
-          "required": "No",
-          "description": "Sub-affiliate's UID"
-        },
-        {
-          "name": "startTime",
-          "type": "Long",
-          "required": "No",
-          "description": "Start timestamp (UTC milliseconds)"
-        },
-        {
-          "name": "endTime",
-          "type": "Long",
-          "required": "No",
-          "description": "End timestamp (UTC milliseconds)"
-        },
-        {
-          "name": "productType",
-          "type": "String",
-          "required": "Yes",
-          "description": "Product type (SPOT or FUTURES)"
-        },
-        {
-          "name": "pageNum",
-          "type": "Integer",
-          "required": "No",
-          "description": "Page number (starts from 1, default 1)"
+          "description": "Total records"
         },
         {
           "name": "pageSize",
           "type": "Integer",
+          "description": "Page size"
+        },
+        {
+          "name": "page",
+          "type": "Integer",
+          "description": "Current page number"
+        },
+        {
+          "name": "pages",
+          "type": "Integer",
+          "description": "Total pages"
+        },
+        {
+          "name": "hasNextPage",
+          "type": "Boolean",
+          "description": "Whether more pages exist"
+        }
+      ],
+      "weight_ip": 100,
+      "weight_uid": 100
+    },
+    {
+      "key": "spot.rebate.internal_withdrawal",
+      "title": "Internal Withdrawal",
+      "category": "rebate",
+      "method": "POST",
+      "path": "/api/v3/rebate/affiliate/internalWithdrawal",
+      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/InternalWithdrawal",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "Long",
+          "required": "Yes",
+          "description": "Transfer-in user ID"
+        },
+        {
+          "name": "String",
+          "required": "Yes",
+          "description": "Currency type (USDT, BTC)"
+        },
+        {
+          "name": "String",
+          "required": "Yes",
+          "description": "Transfer amount (Up to 6 decimal places)"
+        },
+        {
+          "name": "String",
+          "required": "No",
+          "description": "Type of the originating account (SPOT: spot wallet, FUND: funding wallet, Default: SPOT)"
+        },
+        {
+          "name": "String",
+          "required": "No",
+          "description": "Type of the target account (SPOT: spot wallet, FUND: funding wallet, Default: SPOT)"
+        }
+      ],
+      "response_params": [],
+      "weight_ip": 100,
+      "weight_uid": 100
+    },
+    {
+      "key": "spot.rebate.query_sub_channel_transactions",
+      "title": "Get Subaffiliates Data (affiliate only)",
+      "category": "rebate",
+      "method": "POST",
+      "path": "/api/v3/rebate/affiliate/querySubChannelTransactions",
+      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/QuerySubChannelTransactions",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "Sub-affiliate's UID"
+        },
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "Start timestamp (UTC milliseconds)"
+        },
+        {
+          "name": "Long",
+          "required": "No",
+          "description": "End timestamp (UTC milliseconds)"
+        },
+        {
+          "name": "String",
+          "required": "Yes",
+          "description": "Product type (SPOT or FUTURES)"
+        },
+        {
+          "name": "Integer",
+          "required": "No",
+          "description": "Page number (starts from 1, default 1)"
+        },
+        {
+          "name": "Integer",
           "required": "No",
           "description": "Items per page (default 100)"
         }
       ],
       "response_params": [
+        {
+          "name": "records",
+          "type": "Array",
+          "description": "Sub-affiliate records"
+        },
         {
           "name": "subAffiliateUid",
           "type": "String",
@@ -2191,8 +2278,61 @@
           "name": "paidCommission",
           "type": "String",
           "description": "Actual Rebate Amount"
+        },
+        {
+          "name": "total",
+          "type": "Long",
+          "description": "Total records"
+        },
+        {
+          "name": "size",
+          "type": "Integer",
+          "description": "Page size"
+        },
+        {
+          "name": "current",
+          "type": "Integer",
+          "description": "Current page"
+        },
+        {
+          "name": "pages",
+          "type": "Integer",
+          "description": "Total pages"
         }
-      ]
+      ],
+      "weight_ip": 10,
+      "weight_uid": 10
+    },
+    {
+      "key": "spot.rebate.verify_referrals",
+      "title": "Verify Referrals",
+      "category": "rebate",
+      "method": "GET",
+      "path": "/api/v3/agency/verifyReferrals",
+      "doc_url": "https://www.weex.com/api-doc/spot/rebate-endpoints/VerifyReferrals",
+      "requires_auth": true,
+      "request_params": [
+        {
+          "name": "userIds",
+          "type": "String",
+          "required": "Yes",
+          "description": "Comma-separated UID list (for example 12345,67890 ). Supports up to 100 UIDs per call."
+        }
+      ],
+      "response_params": [
+        {
+          "name": "uid",
+          "type": "Long",
+          "description": "UID that was checked"
+        },
+        {
+          "name": "isRefferal",
+          "type": "Boolean",
+          "description": "true if the UID belongs to the current affiliate"
+        }
+      ],
+      "weight_ip": 20,
+      "weight_uid": 20
     }
   ]
 }

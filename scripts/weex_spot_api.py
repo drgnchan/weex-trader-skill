@@ -58,6 +58,14 @@ def load_endpoint_map() -> Dict[str, Endpoint]:
 ENDPOINTS = load_endpoint_map()
 
 
+def find_endpoint_key_by_doc_suffix(doc_suffix: str) -> str:
+    target = f"/{doc_suffix}"
+    for endpoint in ENDPOINTS.values():
+        if endpoint.doc_url.endswith(target):
+            return endpoint.key
+    raise SystemExit(f"Unable to find endpoint with doc suffix {doc_suffix}")
+
+
 def parse_json_arg(raw: str, arg_name: str) -> Dict[str, Any]:
     if not raw:
         return {}
@@ -264,13 +272,9 @@ def execute_endpoint(
 
 def normalize_spot_symbol(symbol: str) -> str:
     s = symbol.strip().upper().replace("-", "").replace("/", "").replace(" ", "")
-    if s.endswith("_SPBL"):
-        core = s[:-5]
-        if core.endswith("USDT") and len(core) > 4:
-            return s
     if s.endswith("USDT") and len(s) > 4:
-        return f"{s}_SPBL"
-    raise SystemExit(f"Unsupported symbol format: {symbol}. Expected like ETHUSDT or ethusdt_spbl")
+        return s
+    raise SystemExit(f"Unsupported symbol format: {symbol}. Expected like ETHUSDT.")
 
 
 def generate_client_order_id() -> str:
@@ -311,7 +315,7 @@ def cmd_call(args: argparse.Namespace, client: WeexSpotClient) -> int:
 def cmd_ticker(args: argparse.Namespace, client: WeexSpotClient) -> int:
     return execute_endpoint(
         client=client,
-        endpoint_key="spot.market.gettickerinfo",
+        endpoint_key=find_endpoint_key_by_doc_suffix("GetTickerInfo"),
         query={"symbol": normalize_spot_symbol(args.symbol)},
         body={},
         dry_run=False,
@@ -323,22 +327,29 @@ def cmd_ticker(args: argparse.Namespace, client: WeexSpotClient) -> int:
 def cmd_place_order(args: argparse.Namespace, client: WeexSpotClient) -> int:
     body: Dict[str, Any] = {
         "symbol": normalize_spot_symbol(args.symbol),
-        "side": args.side,
-        "orderType": args.order_type,
-        "force": args.force,
+        "side": args.side.upper(),
+        "type": args.order_type.upper(),
         "quantity": args.quantity,
-        "clientOrderId": args.client_order_id or generate_client_order_id(),
+        "newClientOrderId": args.new_client_order_id or generate_client_order_id(),
     }
     if args.price is not None:
         body["price"] = args.price
-    if body["orderType"] == "limit" and "price" not in body:
-        raise SystemExit("price is required when orderType=limit")
-    if body["orderType"] == "market" and "price" in body:
-        raise SystemExit("price must be omitted when orderType=market")
+    if args.time_in_force is not None:
+        body["timeInForce"] = args.time_in_force.upper()
+    if body["type"] == "LIMIT":
+        if "price" not in body:
+            raise SystemExit("price is required when type=LIMIT")
+        if "timeInForce" not in body:
+            raise SystemExit("time-in-force is required when type=LIMIT")
+    else:
+        if "price" in body:
+            raise SystemExit("price must be omitted when type=MARKET")
+        if "timeInForce" in body:
+            raise SystemExit("time-in-force must be omitted when type=MARKET")
 
     return execute_endpoint(
         client=client,
-        endpoint_key="spot.order.placeorder",
+        endpoint_key=find_endpoint_key_by_doc_suffix("PlaceOrder"),
         query={},
         body=body,
         dry_run=args.dry_run,
@@ -352,11 +363,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--base-url", default=os.getenv("WEEX_SPOT_API_BASE", DEFAULT_BASE_URL))
     parser.add_argument("--locale", default=os.getenv("WEEX_LOCALE", DEFAULT_LOCALE))
     parser.add_argument("--timeout", type=float, default=float(os.getenv("WEEX_API_TIMEOUT", DEFAULT_TIMEOUT)))
+    categories = sorted({endpoint.category for endpoint in ENDPOINTS.values() if endpoint.category})
 
     sub = parser.add_subparsers(dest="command", required=True)
 
     p_list = sub.add_parser("list-endpoints", help="List supported spot REST endpoints")
-    p_list.add_argument("--category", choices=["config", "market", "account", "order", "rebate"], default=None)
+    p_list.add_argument("--category", choices=categories, default=None)
     p_list.add_argument("--pretty", action="store_true")
 
     p_call = sub.add_parser("call", help="Call a spot endpoint by key with JSON query/body")
@@ -371,14 +383,14 @@ def build_parser() -> argparse.ArgumentParser:
     p_ticker.add_argument("--symbol", required=True)
     p_ticker.add_argument("--pretty", action="store_true")
 
-    p_place = sub.add_parser("place-order", help="Convenience wrapper for spot.order.placeorder")
+    p_place = sub.add_parser("place-order", help="Convenience wrapper for the live spot PlaceOrder doc")
     p_place.add_argument("--symbol", required=True)
-    p_place.add_argument("--side", required=True, choices=["buy", "sell"])
-    p_place.add_argument("--order-type", required=True, choices=["limit", "market"])
+    p_place.add_argument("--side", required=True, choices=["BUY", "SELL", "buy", "sell"])
+    p_place.add_argument("--order-type", required=True, choices=["LIMIT", "MARKET", "limit", "market"])
     p_place.add_argument("--quantity", required=True)
     p_place.add_argument("--price", default=None)
-    p_place.add_argument("--force", default="normal")
-    p_place.add_argument("--client-order-id", default=None)
+    p_place.add_argument("--time-in-force", default=None, choices=["GTC", "IOC", "FOK", "gtc", "ioc", "fok"])
+    p_place.add_argument("--new-client-order-id", default=None)
     p_place.add_argument("--dry-run", action="store_true")
     p_place.add_argument("--confirm-live", action="store_true")
     p_place.add_argument("--pretty", action="store_true")

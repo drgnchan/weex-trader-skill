@@ -57,6 +57,10 @@ Use $weex-trader-skill to get the latest BTCUSDT spot ticker and explain the res
 Use $weex-trader-skill to place a contract limit short on ETHUSDT, size 0.001 at 10000.
 ```
 
+Current local wrappers target the latest documented V3 order endpoints:
+- Contract: `POST /capi/v3/order`
+- Spot: `POST /api/v3/order`
+
 ```text
 Use $weex-trader-skill to cancel my open ETHUSDT contract orders.
 ```
@@ -71,3 +75,11 @@ Notes:
 - `Skill not found`: ask Codex to reinstall the skill and verify `$weex-trader-skill` is available.
 - `Authentication/signature error`: re-check `WEEX_API_KEY`, `WEEX_API_SECRET`, `WEEX_API_PASSPHRASE`, and `WEEX_API_BASE`.
 - `Order rejected (balance/permission)`: verify account balance, API key permissions, and market/symbol.
+
+## Regenerate Definitions
+
+To rebuild local spot and contract REST definitions from the current WEEX V3 docs:
+
+```bash
+python3 scripts/generate_weex_api_definitions.py --product all
+```
