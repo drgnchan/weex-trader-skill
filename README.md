@@ -1,6 +1,6 @@
 # weex-trader-skill
 
-Use this skill in Codex to automate WEEX **futures** and **spot** tasks with natural language.
+Use this skill in Codex / Openclaw / Claude Code to automate WEEX **futures** and **spot** tasks with natural language.
 
 - Get market data
 - Check account/position data
@@ -67,7 +67,7 @@ export WEEX_LOCALE="en-US"
 - Use least-privilege API keys for this workflow.
 - If credentials are exposed, revoke/rotate them immediately.
 
-## How to Use This Skill in Codex
+## How to Use This Skill in Codex / Openclaw / Claude Code
 
 Mention `$weex-trader-skill` and describe what you want in plain English.
 
@@ -89,19 +89,12 @@ Current local wrappers target the latest documented V3 order endpoints:
 Use $weex-trader-skill to cancel my open ETHUSDT futures orders.
 ```
 
-Notes:
-- You do not need to provide exchange-specific numeric fields.
-- Codex converts your intent into structured request arguments.
-- If required fields are missing, Codex asks only for missing fields.
-
 ## Module quick-reference
 
-- `Spot`: spot trading module for public market data and private spot actions, including ticker lookup, account balance, open orders, trade history, and spot order placement/cancel flows.
-- `Futures`: futures trading module for perp-style workflows, including market data, account config, balance, positions, leverage/margin settings, and futures order placement/cancel flows.
-- `Market data`: public read-only queries across spot and futures, such as server time, ticker, depth, trades, and kline-style price history. No API credentials are required.
-- `Account & positions`: private account state queries, including balances, permissions, commissions, open positions, margin mode, leverage, and bill/income-style history. API credentials are required.
-- `Order execution`: mutating trading operations for both spot and futures. Live order placement and cancel actions require explicit confirmation via `--confirm-live`.
-- `Affiliate / rebate`: spot-side affiliate and channel endpoints are included for referral verification, commission queries, rebate records, and related internal withdrawal workflows.
+| Module | What it covers | Auth |
+|---|---|---|
+| `Spot` | Spot market data, balances, orders, trade history, and affiliate/rebate endpoints. | Public + private |
+| `Futures` | Futures market data, account state, orders, positions, leverage/margin settings endpoints. | Public + private |
 
 
 ## Troubleshooting
